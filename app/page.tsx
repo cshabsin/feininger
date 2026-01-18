@@ -44,7 +44,7 @@ export default function Home() {
   const currentData = history[currentIndex];
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-8 bg-neutral-900 text-neutral-200">
+    <main className="flex min-h-screen flex-col items-center justify-start pt-24 lg:justify-between p-8 lg:pt-8 bg-neutral-900 text-neutral-200">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
         <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30 z-10">
           Feininger Generator &nbsp;
@@ -94,7 +94,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="relative flex place-items-center justify-center p-4 mt-24 lg:mt-0">
+      <div className="relative flex place-items-center justify-center p-4">
         {currentData ? (
           <div className="border-8 border-neutral-800 shadow-2xl bg-white">
             <svg 
