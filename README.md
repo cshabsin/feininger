@@ -33,7 +33,15 @@ A generative art tool built with Next.js and TypeScript that creates SVG images 
 ## Note on Implementation
 
 The project follows the "Prismatism" artistic constraints:
+
 - Horizon line at ~2/3 height.
+
 - Triangular sails with random jitter.
+
 - Large transparent "light beam" polygons.
+
 - Opacity layering (0.1 - 0.4).
+
+
+
+<!-- Triggering re-run -->
