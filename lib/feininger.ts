@@ -176,7 +176,7 @@ export function generateFeiningerV1(width: number, height: number): FeiningerDat
 
 // --- V2 Generator (Figures on Shore) ---
 
-export function generateFeiningerV2(width: number, height: number): FeiningerData {
+export function generateFeiningerV2(width: number, height: number, forceWaldo: boolean = false): FeiningerData {
   const shapes: Shape[] = [];
   
   // Define Zones
@@ -343,9 +343,14 @@ export function generateFeiningerV2(width: number, height: number): FeiningerDat
   // Narrower figures: 0.009 (was 0.012)
   const figureWidthBase = width * 0.009; 
   const figureHeightBase = height * 0.09; 
+  
+  const spawnWaldo = forceWaldo || Math.random() < 0.05; // 5% chance normally
 
-  for (let i = 0; i < numFigures; i++) {
-    const isMan = Math.random() > 0.45; 
+  for (let i = 0; i < (spawnWaldo ? numFigures + 1 : numFigures); i++) {
+    // If we are spawning Waldo, make the last figure Waldo
+    const isWaldo = spawnWaldo && i === numFigures;
+    
+    const isMan = isWaldo ? true : Math.random() > 0.45; 
     const posX = randomRange(width * 0.05, width * 0.95);
     
     // Calculate ground Y at figure position
@@ -362,7 +367,125 @@ export function generateFeiningerV2(width: number, height: number): FeiningerDat
     const figOpacity = 1.0;
     const figBlend = 'normal';
 
-    if (isMan) {
+    if (isWaldo) {
+        // WALDO GENERATION
+        // Blue Jeans
+        shapes.push({
+            id: `waldo-legs-${i}`,
+            type: 'polygon',
+            points: [
+                {x: posX - fWidth * 0.5, y: posY},
+                {x: posX + fWidth * 0.6, y: posY},
+                {x: posX + fWidth * 0.55, y: posY - fHeight * 0.4}, // Waist
+                {x: posX - fWidth * 0.45, y: posY - fHeight * 0.4} 
+            ],
+            fill: "#2e5cb8", // Blue denim
+            opacity: figOpacity,
+            blendMode: figBlend
+        });
+
+        // Striped Shirt (Body)
+        const shirtY = posY - fHeight * 0.4;
+        const shoulderY = posY - fHeight * 0.88;
+        const shirtHeight = shirtY - shoulderY;
+        
+        // White Base
+        shapes.push({
+            id: `waldo-shirt-base-${i}`,
+            type: 'polygon',
+            points: [
+                {x: posX - fWidth * 0.45, y: shirtY},
+                {x: posX + fWidth * 0.55, y: shirtY},
+                {x: posX + fWidth * 0.5, y: shoulderY},
+                {x: posX - fWidth * 0.5, y: shoulderY}
+            ],
+            fill: "#eee",
+            opacity: figOpacity,
+            blendMode: figBlend
+        });
+
+        // Red Stripes
+        const numStripes = 5;
+        for(let s=0; s<numStripes; s++) {
+             const sy = shoulderY + (shirtHeight / numStripes) * s;
+             shapes.push({
+                id: `waldo-stripe-${i}-${s}`,
+                type: 'polygon',
+                points: [
+                    {x: posX - fWidth * 0.5, y: sy},
+                    {x: posX + fWidth * 0.55, y: sy},
+                    {x: posX + fWidth * 0.55, y: sy + (shirtHeight/numStripes)*0.5},
+                    {x: posX - fWidth * 0.5, y: sy + (shirtHeight/numStripes)*0.5}
+                ],
+                fill: "#d92b2b",
+                opacity: figOpacity,
+                blendMode: figBlend
+            });
+        }
+
+        // Head
+        const headY = shoulderY;
+        const headSize = fWidth * 0.85;
+        shapes.push({
+            id: `waldo-head-${i}`,
+            type: 'polygon',
+            points: [
+                {x: posX - headSize/2, y: headY},
+                {x: posX + headSize/2, y: headY},
+                {x: posX + headSize/2, y: headY - headSize * 1.1},
+                {x: posX - headSize/2, y: headY - headSize * 1.1}
+            ],
+            fill: "#F5DEB3", 
+            opacity: figOpacity,
+            blendMode: figBlend
+        });
+
+        // Beanie (White with Red rim/pom)
+        const hatBrimY = headY - headSize * 0.9;
+        shapes.push({
+            id: `waldo-hat-${i}`,
+            type: 'polygon',
+            points: [
+                {x: posX - headSize * 0.6, y: hatBrimY},
+                {x: posX + headSize * 0.6, y: hatBrimY},
+                {x: posX + headSize * 0.4, y: hatBrimY - headSize * 0.6},
+                {x: posX - headSize * 0.4, y: hatBrimY - headSize * 0.6}
+            ],
+            fill: "#eee", 
+            opacity: figOpacity,
+            blendMode: figBlend
+        });
+        // Red Pom/Rim
+        shapes.push({
+            id: `waldo-hat-rim-${i}`,
+            type: 'polygon',
+            points: [
+                 {x: posX - headSize * 0.6, y: hatBrimY},
+                 {x: posX + headSize * 0.6, y: hatBrimY},
+                 {x: posX + headSize * 0.6, y: hatBrimY - 2},
+                 {x: posX - headSize * 0.6, y: hatBrimY - 2}
+            ],
+            fill: "#d92b2b",
+            opacity: figOpacity,
+            blendMode: figBlend
+        });
+        
+        // Glasses (Simple line/rect)
+        shapes.push({
+            id: `waldo-glasses-${i}`,
+            type: 'polygon',
+            points: [
+                 {x: posX - headSize * 0.4, y: headY - headSize * 0.6},
+                 {x: posX + headSize * 0.4, y: headY - headSize * 0.6},
+                 {x: posX + headSize * 0.4, y: headY - headSize * 0.5},
+                 {x: posX - headSize * 0.4, y: headY - headSize * 0.5}
+            ],
+            fill: "#111",
+            opacity: 0.8,
+            blendMode: figBlend
+        });
+
+    } else if (isMan) {
         // Feininger Man: Styles
         const color = randomChoice(PALETTE_V2_SUIT);
         const armStyle = Math.random(); // <0.33: Straight, <0.66: Akimbo (elbow out), else Tight/Crossed

@@ -16,12 +16,12 @@ export default function Home() {
     handleGenerate('v2'); 
   }, []);
 
-  const handleGenerate = (targetVersion: Version = version) => {
+  const handleGenerate = (targetVersion: Version = version, overrideForceWaldo: boolean = false) => {
     let newData: FeiningerData;
     if (targetVersion === 'v1') {
       newData = generateFeiningerV1(dimensions.width, dimensions.height);
     } else {
-      newData = generateFeiningerV2(dimensions.width, dimensions.height);
+      newData = generateFeiningerV2(dimensions.width, dimensions.height, overrideForceWaldo);
     }
     
     const newHistory = [...history.slice(0, currentIndex + 1), newData];
@@ -54,7 +54,7 @@ export default function Home() {
         <div className="fixed bottom-0 left-0 flex h-auto w-full flex-col items-center justify-end bg-gradient-to-t from-white via-white dark:from-black dark:via-black pb-4 lg:static lg:h-auto lg:w-auto lg:bg-none lg:pb-0 lg:flex-col lg:items-end lg:justify-center">
           
           {/* Version Selector */}
-          <div className="mb-4 flex bg-neutral-800 rounded-lg p-1 border border-neutral-700 pointer-events-auto">
+          <div className="mb-4 flex bg-neutral-800 rounded-lg p-1 border border-neutral-700 pointer-events-auto z-10">
                 <button
                     onClick={() => { setVersion('v1'); handleGenerate('v1'); }}
                     className={`px-3 py-1 rounded text-xs transition ${version === 'v1' ? 'bg-neutral-600 text-white font-bold' : 'text-neutral-400 hover:text-white'}`}
@@ -62,7 +62,7 @@ export default function Home() {
                     V1: Sails
                 </button>
                 <button
-                    onClick={() => { setVersion('v2'); handleGenerate('v2'); }}
+                    onClick={(e) => { setVersion('v2'); handleGenerate('v2', e.shiftKey); }}
                     className={`px-3 py-1 rounded text-xs transition ${version === 'v2' ? 'bg-neutral-600 text-white font-bold' : 'text-neutral-400 hover:text-white'}`}
                 >
                     V2: Figures
@@ -78,7 +78,7 @@ export default function Home() {
                Previous
              </button>
              <button 
-               onClick={() => handleGenerate()} 
+               onClick={(e) => handleGenerate(version, e.shiftKey)} 
                className="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded border border-slate-500 font-bold transition text-white"
              >
                Generate New
@@ -114,8 +114,8 @@ export default function Home() {
                 {/* Filter 1: Horizontal Strokes (Sky, Sea, Ground) */}
                 <filter id="strokeH" x="-20%" y="-20%" width="140%" height="140%">
                   <feTurbulence type="fractalNoise" baseFrequency="0.005 0.05" numOctaves="3" result="noise" seed="1"/>
-                  <feDisplacementMap in="SourceGraphic" in2="noise" scale="5" xChannelSelector="R" yChannelSelector="G" result="distorted" />
-                  <feSpecularLighting in="noise" surfaceScale="2" specularConstant="0.6" specularExponent="20" lightingColor="#fff" result="light">
+                  <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G" result="distorted" />
+                  <feSpecularLighting in="noise" surfaceScale="1.5" specularConstant="0.4" specularExponent="30" lightingColor="#fff" result="light">
                     <fePointLight x="-5000" y="-10000" z="20000" />
                   </feSpecularLighting>
                   <feComposite in="light" in2="distorted" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="painted" />
@@ -125,8 +125,8 @@ export default function Home() {
                 {/* Filter 2: Vertical Strokes (Figures, Sails) */}
                 <filter id="strokeV" x="-20%" y="-20%" width="140%" height="140%">
                   <feTurbulence type="fractalNoise" baseFrequency="0.05 0.005" numOctaves="3" result="noise" seed="2"/>
-                  <feDisplacementMap in="SourceGraphic" in2="noise" scale="5" xChannelSelector="R" yChannelSelector="G" result="distorted" />
-                  <feSpecularLighting in="noise" surfaceScale="2" specularConstant="0.6" specularExponent="20" lightingColor="#fff" result="light">
+                  <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G" result="distorted" />
+                  <feSpecularLighting in="noise" surfaceScale="1.5" specularConstant="0.4" specularExponent="30" lightingColor="#fff" result="light">
                     <fePointLight x="-5000" y="-10000" z="20000" />
                   </feSpecularLighting>
                   <feComposite in="light" in2="distorted" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="painted" />
@@ -136,8 +136,8 @@ export default function Home() {
                 {/* Filter 3: Rough/Messy Strokes (Variations, Beams) */}
                 <filter id="strokeRough" x="-20%" y="-20%" width="140%" height="140%">
                   <feTurbulence type="fractalNoise" baseFrequency="0.03 0.03" numOctaves="4" result="noise" seed="3"/>
-                  <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" xChannelSelector="R" yChannelSelector="G" result="distorted" />
-                  <feSpecularLighting in="noise" surfaceScale="3" specularConstant="0.4" specularExponent="10" lightingColor="#fff" result="light">
+                  <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G" result="distorted" />
+                  <feSpecularLighting in="noise" surfaceScale="2" specularConstant="0.3" specularExponent="25" lightingColor="#fff" result="light">
                      <fePointLight x="-5000" y="-10000" z="20000" />
                   </feSpecularLighting>
                   <feComposite in="light" in2="distorted" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="painted" />
@@ -182,7 +182,7 @@ export default function Home() {
               })}
               
               {/* Overlay Canvas Texture */}
-              <rect width="100%" height="100%" filter="url(#canvas)" opacity="0.4" style={{ mixBlendMode: 'overlay' }} pointerEvents="none"/>
+              <rect width="100%" height="100%" filter="url(#canvas)" opacity="0.2" style={{ mixBlendMode: 'overlay' }} pointerEvents="none"/>
             </svg>
           </div>
         ) : (
