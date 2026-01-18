@@ -94,7 +94,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="relative flex place-items-center justify-center p-4">
+      <div className="relative flex place-items-center justify-center p-4 mt-24 lg:mt-0">
         {currentData ? (
           <div className="border-8 border-neutral-800 shadow-2xl bg-white">
             <svg 
