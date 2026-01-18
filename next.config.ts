@@ -2,6 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
+  output: 'export',
+  basePath: '/feininger',
+  images: {
+    unoptimized: true,
+  },
   reactCompiler: true,
 };
 
