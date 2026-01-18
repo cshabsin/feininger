@@ -1,0 +1,12 @@
+Initial commit: Feininger Prismatism Generator
+
+- Implemented V1 "Sails" generation with crystalline geometry.
+- Implemented V2 "Intentional Figures" with:
+  - Ground/Sea/Sky regions with clipped broad partitioning textures.
+  - Detailed figures (men in suits, women in dresses) with randomized styles (arms, hats, shawls).
+  - Opaque figures with correct blending.
+  - "Prismatism" light beams overlay.
+- Next.js UI with history navigation and version selector.
+- SVG rendering with clip paths and blend modes.
+
+Gemini commit: some men should be in brown suits instead of black suits. and generally fewer figures in these, 1-3? these are looking crowded.

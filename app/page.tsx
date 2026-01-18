@@ -105,10 +105,27 @@ export default function Home() {
               style={{ backgroundColor: currentData.version === 'v2' ? '#F5F5F5' : '#F0F8FF' }} 
             >
               <defs>
-                <filter id="noise" x="0%" y="0%" width="100%" height="100%">
-                    <feTurbulence baseFrequency="0.6" numOctaves="3" type="fractalNoise" result="turbulence"/>
-                    <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.1 0" in="turbulence" result="coloredNoise"/>
-                    <feComposite operator="in" in="coloredNoise" in2="SourceGraphic" result="composite"/>
+                {/* 1. Oil Paint / Brush Stroke Filter (Enhanced with Impasto) */}
+                <filter id="oilPaint">
+                  {/* Noise for distortion and height map */}
+                  <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="4" result="noise" />
+                  
+                  {/* Distort the colors to simulate brush strokes */}
+                  <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G" result="distorted" />
+                  
+                  {/* Create 3D lighting from the noise (Impasto effect) */}
+                  <feSpecularLighting in="noise" surfaceScale="2" specularConstant="0.5" specularExponent="20" lightingColor="#ffffff" result="light">
+                    <fePointLight x="-5000" y="-10000" z="20000" />
+                  </feSpecularLighting>
+                  
+                  {/* Combine lighting with distorted image */}
+                  <feComposite in="light" in2="distorted" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="painted" />
+                </filter>
+
+                {/* 2. Canvas Texture Filter */}
+                <filter id="canvas">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="3" stitchTiles="stitch" />
+                  <feColorMatrix type="matrix" values="0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0.2 0" />
                 </filter>
                 
                 {currentData.regions?.map((region) => (
@@ -118,23 +135,25 @@ export default function Home() {
                 ))}
               </defs>
               
-              {/* Render Shapes */}
-              {currentData.shapes.map((shape) => (
-                <polygon
-                  key={shape.id}
-                  points={shape.points.map(p => `${p.x},${p.y}`).join(' ')}
-                  fill={shape.fill}
-                  fillOpacity={shape.opacity}
-                  stroke={shape.fill} 
-                  strokeWidth="0.5"
-                  strokeOpacity={shape.opacity * 1.5}
-                  style={{ mixBlendMode: shape.blendMode || 'multiply' }} 
-                  clipPath={shape.clipPathId ? `url(#${shape.clipPathId})` : undefined}
-                />
-              ))}
+              {/* Render Shapes within a Group for Distortion */}
+              <g filter="url(#oilPaint)">
+                {currentData.shapes.map((shape) => (
+                    <polygon
+                    key={shape.id}
+                    points={shape.points.map(p => `${p.x},${p.y}`).join(' ')}
+                    fill={shape.fill}
+                    fillOpacity={shape.opacity}
+                    stroke={shape.fill} 
+                    strokeWidth="0.5"
+                    strokeOpacity={shape.opacity * 1.5}
+                    style={{ mixBlendMode: shape.blendMode || 'multiply' }} 
+                    clipPath={shape.clipPathId ? `url(#${shape.clipPathId})` : undefined}
+                    />
+                ))}
+              </g>
               
-              {/* Optional: Overlay texture for paper feel */}
-              <rect width="100%" height="100%" filter="url(#noise)" opacity="0.3" fill="none"/>
+              {/* Overlay Canvas Texture */}
+              <rect width="100%" height="100%" filter="url(#canvas)" opacity="0.4" style={{ mixBlendMode: 'overlay' }} pointerEvents="none"/>
             </svg>
           </div>
         ) : (
