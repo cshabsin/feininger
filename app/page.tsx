@@ -10,7 +10,6 @@ export default function Home() {
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [version, setVersion] = useState<Version>('v2');
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
-  const [seed, setSeed] = useState(1);
 
   // Initial generation
   useEffect(() => {
@@ -18,7 +17,6 @@ export default function Home() {
   }, []);
 
   const handleGenerate = (targetVersion: Version = version, overrideForceWaldo: boolean = false) => {
-    setSeed(Math.floor(Math.random() * 1000));
     let newData: FeiningerData;
     if (targetVersion === 'v1') {
       newData = generateFeiningerV1(dimensions.width, dimensions.height);
@@ -115,7 +113,7 @@ export default function Home() {
 
                 {/* Filter 1: Horizontal Strokes (Sky, Sea) */}
                 <filter id="strokeH" x="-20%" y="-20%" width="140%" height="140%">
-                  <feTurbulence type="fractalNoise" baseFrequency="0.005 0.05" numOctaves="3" result="noise" seed={seed}/>
+                  <feTurbulence type="fractalNoise" baseFrequency="0.005 0.05" numOctaves="3" result="noise" seed={currentData.seed}/>
                   <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G" result="distorted" />
                   <feSpecularLighting in="noise" surfaceScale="1.5" specularConstant="0.4" specularExponent="30" lightingColor="#fff" result="light">
                     <fePointLight x="-5000" y="-10000" z="20000" />
@@ -126,7 +124,7 @@ export default function Home() {
 
                 {/* Filter 2: Ground Strokes (More textured/rougher) */}
                 <filter id="strokeGround" x="-20%" y="-20%" width="140%" height="140%">
-                  <feTurbulence type="fractalNoise" baseFrequency="0.02 0.04" numOctaves="4" result="noise" seed={seed + 3}/>
+                  <feTurbulence type="fractalNoise" baseFrequency="0.02 0.04" numOctaves="4" result="noise" seed={currentData.seed + 3}/>
                   <feDisplacementMap in="SourceGraphic" in2="noise" scale="5" xChannelSelector="R" yChannelSelector="G" result="distorted" />
                   <feSpecularLighting in="noise" surfaceScale="2" specularConstant="0.3" specularExponent="25" lightingColor="#fff" result="light">
                     <fePointLight x="-5000" y="-10000" z="20000" />
@@ -137,7 +135,7 @@ export default function Home() {
 
                 {/* Filter 3: Vertical Strokes (Figures, Sails) */}
                 <filter id="strokeV" x="-20%" y="-20%" width="140%" height="140%">
-                  <feTurbulence type="fractalNoise" baseFrequency="0.05 0.005" numOctaves="3" result="noise" seed={seed + 1}/>
+                  <feTurbulence type="fractalNoise" baseFrequency="0.05 0.005" numOctaves="3" result="noise" seed={currentData.seed + 1}/>
                   <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G" result="distorted" />
                   <feSpecularLighting in="noise" surfaceScale="1.5" specularConstant="0.4" specularExponent="30" lightingColor="#fff" result="light">
                     <fePointLight x="-5000" y="-10000" z="20000" />
@@ -148,7 +146,7 @@ export default function Home() {
 
                 {/* Filter 4: Rough/Messy Strokes (Variations, Beams) */}
                 <filter id="strokeRough" x="-20%" y="-20%" width="140%" height="140%">
-                  <feTurbulence type="fractalNoise" baseFrequency="0.03 0.03" numOctaves="4" result="noise" seed={seed + 2}/>
+                  <feTurbulence type="fractalNoise" baseFrequency="0.03 0.03" numOctaves="4" result="noise" seed={currentData.seed + 2}/>
                   <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G" result="distorted" />
                   <feSpecularLighting in="noise" surfaceScale="2" specularConstant="0.3" specularExponent="25" lightingColor="#fff" result="light">
                      <fePointLight x="-5000" y="-10000" z="20000" />

@@ -27,6 +27,7 @@ export interface FeiningerData {
   horizonY: number;
   version: 'v1' | 'v2';
   regions?: Region[];
+  seed: number;
 }
 
 const PALETTE_V1 = [
@@ -66,6 +67,7 @@ function randomChoice<T>(arr: T[]): T {
 export function generateFeiningerV1(width: number, height: number): FeiningerData {
   const shapes: Shape[] = [];
   const horizonY = height * 0.66;
+  const seed = randomInt(1, 1000);
 
   // 1. Sky/Sea Background (Large blocks)
   shapes.push({
@@ -171,13 +173,14 @@ export function generateFeiningerV1(width: number, height: number): FeiningerDat
      });
   }
 
-  return { width, height, shapes, horizonY, version: 'v1' };
+  return { width, height, shapes, horizonY, version: 'v1', seed };
 }
 
 // --- V2 Generator (Figures on Shore) ---
 
 export function generateFeiningerV2(width: number, height: number, forceWaldo: boolean = false): FeiningerData {
   const shapes: Shape[] = [];
+  const seed = randomInt(1, 1000);
   
   // Define Zones
   // Ground: Slanted horizon. 
@@ -706,5 +709,5 @@ export function generateFeiningerV2(width: number, height: number, forceWaldo: b
      });
   }
 
-  return { width, height, shapes, horizonY, version: 'v2', regions };
+  return { width, height, shapes, horizonY, version: 'v2', regions, seed };
 }
