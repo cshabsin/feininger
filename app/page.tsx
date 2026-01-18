@@ -146,7 +146,11 @@ export default function Home() {
 
                 {currentData.regions?.map((region) => (
                     <clipPath id={region.id} key={region.id}>
-                        <rect x="0" y={region.y} width={currentData.width} height={region.height} />
+                        {region.points ? (
+                            <polygon points={region.points.map(p => `${p.x},${p.y}`).join(' ')} />
+                        ) : (
+                            <rect x="0" y={region.y} width={currentData.width} height={region.height} />
+                        )}
                     </clipPath>
                 ))}
               </defs>

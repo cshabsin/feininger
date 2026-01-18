@@ -15,8 +15,9 @@ export interface Shape {
 
 export interface Region {
   id: string;
-  y: number;
-  height: number;
+  y?: number; // Optional now, used for rect
+  height?: number;
+  points?: Point[]; // Used for polygon clip
 }
 
 export interface FeiningerData {
@@ -179,13 +180,18 @@ export function generateFeiningerV2(width: number, height: number): FeiningerDat
   const shapes: Shape[] = [];
   
   // Define Zones
-  // Ground: Bottom 12%
-  const groundHeight = height * 0.12;
-  const groundY = height - groundHeight;
+  // Ground: Slanted horizon. 
+  // Base height ~12% but with +/- skew
+  const groundBaseH = height * 0.12;
+  const skew = randomRange(-height * 0.05, height * 0.05);
+  
+  const groundYLeft = (height - groundBaseH) + skew;
+  const groundYRight = (height - groundBaseH) - skew;
 
-  // Sea: Above Ground, 22%
+  // Sea: Above Ground, ~22%
   const seaHeight = height * 0.22;
-  const seaY = groundY - seaHeight;
+  // Sea top is flat for the horizon
+  const seaY = Math.min(groundYLeft, groundYRight) - seaHeight;
   
   // Sky: Top ~66% (from 0 to seaY)
   const skyHeight = seaY;
@@ -193,9 +199,9 @@ export function generateFeiningerV2(width: number, height: number): FeiningerDat
   const horizonY = seaY; 
 
   const regions: Region[] = [
-    { id: 'cp-sky', y: 0, height: skyHeight },
-    { id: 'cp-sea', y: seaY, height: seaHeight },
-    { id: 'cp-ground', y: groundY, height: groundHeight }
+    { id: 'cp-sky', points: [{x:0, y:0}, {x:width, y:0}, {x:width, y:seaY}, {x:0, y:seaY}] },
+    { id: 'cp-sea', points: [{x:0, y:seaY}, {x:width, y:seaY}, {x:width, y:groundYRight}, {x:0, y:groundYLeft}] },
+    { id: 'cp-ground', points: [{x:0, y:groundYLeft}, {x:width, y:groundYRight}, {x:width, y:height}, {x:0, y:height}] }
   ];
 
   // 1. Base Layers
@@ -211,7 +217,7 @@ export function generateFeiningerV2(width: number, height: number): FeiningerDat
   shapes.push({
     id: 'base-sea',
     type: 'polygon',
-    points: [{x: 0, y: seaY}, {x: width, y: seaY}, {x: width, y: groundY}, {x: 0, y: groundY}],
+    points: [{x: 0, y: seaY}, {x: width, y: seaY}, {x: width, y: groundYRight}, {x: 0, y: groundYLeft}],
     fill: "#4682B4",
     opacity: 0.6
   });
@@ -219,7 +225,7 @@ export function generateFeiningerV2(width: number, height: number): FeiningerDat
   shapes.push({
     id: 'base-ground',
     type: 'polygon',
-    points: [{x: 0, y: groundY}, {x: width, y: groundY}, {x: width, y: height}, {x: 0, y: height}],
+    points: [{x: 0, y: groundYLeft}, {x: width, y: groundYRight}, {x: width, y: height}, {x: 0, y: height}],
     fill: "#1A1A1A",
     opacity: 0.9
   });
@@ -265,8 +271,71 @@ export function generateFeiningerV2(width: number, height: number): FeiningerDat
 
   // Fewer, broader partitions
   addVariation(0, seaY, PALETTE_V2_SKY, 4, 'var-sky', 'cp-sky');
-  addVariation(seaY, groundY, PALETTE_V2_SEA, 3, 'var-sea', 'cp-sea');
-  addVariation(groundY, height, PALETTE_V2_GROUND, 2, 'var-ground', 'cp-ground');
+  
+  // Sea Perspective: Horizontal bands compressing towards the horizon
+  let currentY = seaY;
+  let bandCount = 0;
+  const maxGroundY = Math.max(groundYLeft, groundYRight);
+  
+  while (currentY < maxGroundY) {
+      const dist = currentY - seaY;
+      const bandHeight = 3 + (dist * 0.15) + randomRange(-1, 2);
+      
+      if (currentY + bandHeight > maxGroundY) break;
+
+      const segments = randomInt(1, 4);
+      const segmentWidth = width / segments;
+
+      for (let s = 0; s < segments; s++) {
+          const sx = s * segmentWidth;
+          const slant = randomRange(-20, 20); 
+          
+          shapes.push({
+              id: `sea-band-${bandCount}-${s}`,
+              type: 'polygon',
+              points: [
+                  { x: sx - (s > 0 ? 50 : 0), y: currentY }, 
+                  { x: sx + segmentWidth + (s < segments-1 ? 50 : 0), y: currentY }, 
+                  { x: sx + segmentWidth + slant, y: currentY + bandHeight },
+                  { x: sx + slant, y: currentY + bandHeight }
+              ],
+              fill: randomChoice(PALETTE_V2_SEA),
+              opacity: randomRange(0.3, 0.5), 
+              clipPathId: 'cp-sea',
+              blendMode: 'multiply'
+          });
+      }
+      
+      currentY += bandHeight * 0.8; 
+      bandCount++;
+  }
+
+  // Ground Texture: Mounds / Dunes
+  // Overlapping curves (approximated by polygons) to give volume to the shore
+  const numMounds = randomInt(3, 6);
+  for (let i = 0; i < numMounds; i++) {
+      const mx = randomRange(0, width);
+      const mWidth = randomRange(width * 0.3, width * 0.6);
+      
+      // Interpolate ground Y at mx
+      const t = mx / width;
+      const groundYAtM = groundYLeft * (1-t) + groundYRight * t;
+      
+      shapes.push({
+          id: `ground-mound-${i}`,
+          type: 'polygon',
+          points: [
+              { x: mx - mWidth/2, y: height }, // Bottom left
+              { x: mx + mWidth/2, y: height }, // Bottom right
+              { x: mx + mWidth * 0.2, y: groundYAtM - randomRange(10, 40) }, // Top right peak
+              { x: mx - mWidth * 0.2, y: groundYAtM - randomRange(10, 40) }  // Top left peak
+          ],
+          fill: randomChoice(PALETTE_V2_GROUND),
+          opacity: randomRange(0.4, 0.7),
+          clipPathId: 'cp-ground',
+          blendMode: 'normal' // Mounds are solid-ish
+      });
+  }
 
 
   // 3. Figures
@@ -278,7 +347,12 @@ export function generateFeiningerV2(width: number, height: number): FeiningerDat
   for (let i = 0; i < numFigures; i++) {
     const isMan = Math.random() > 0.45; 
     const posX = randomRange(width * 0.05, width * 0.95);
-    const posY = groundY + randomRange(5, 35); 
+    
+    // Calculate ground Y at figure position
+    const t = posX / width;
+    const groundYAtPos = groundYLeft * (1-t) + groundYRight * t;
+    
+    const posY = groundYAtPos + randomRange(5, 35); 
     const facingRight = Math.random() > 0.5;
     const direction = facingRight ? 1 : -1;
 
