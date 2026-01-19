@@ -576,6 +576,43 @@ export function generateFeiningerV2(width: number, height: number, forceWaldo: b
         const hatBrimY = headY - headSize * 0.9;
 
         if (hasHat) {
+            // Under-hat hair
+            if (Math.random() < 0.5) {
+                const hairColor = randomChoice(["#2F2F2F", "#3E2723", "#5D4037", "#1C1C1C", "#A9A9A9"]);
+                const hairRoll = Math.random();
+                if (hairRoll < 0.7) {
+                    // Sideburns / Peek-a-boo hair
+                    shapes.push({
+                        id: `man-hair-peek-${i}`,
+                        type: 'polygon',
+                        points: [
+                            {x: posX - headSize * 0.52, y: headY - headSize * 0.5},
+                            {x: posX + headSize * 0.52, y: headY - headSize * 0.5},
+                            {x: posX + headSize * 0.5, y: headY - headSize * 0.95},
+                            {x: posX - headSize * 0.5, y: headY - headSize * 0.95}
+                        ],
+                        fill: hairColor,
+                        opacity: figOpacity,
+                        blendMode: figBlend
+                    });
+                } else {
+                    // Long hair peeking out
+                    shapes.push({
+                        id: `man-hair-long-peek-${i}`,
+                        type: 'polygon',
+                        points: [
+                            {x: posX - headSize * 0.55, y: headY - headSize * 0.2},
+                            {x: posX + headSize * 0.55, y: headY - headSize * 0.2},
+                            {x: posX + headSize * 0.5, y: headY - headSize * 0.95},
+                            {x: posX - headSize * 0.5, y: headY - headSize * 0.95}
+                        ],
+                        fill: hairColor,
+                        opacity: figOpacity,
+                        blendMode: figBlend
+                    });
+                }
+            }
+
             shapes.push({
                 id: `man-hat-brim-${i}`,
                 type: 'polygon',
