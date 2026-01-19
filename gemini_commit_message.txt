@@ -1,6 +1,3 @@
-Clip oil paint filters to shape boundaries
+Update title and favicon
 
-- Added final `feComposite` step with `operator="in"` to all directional stroke filters (`strokeH`, `strokeV`, `strokeRough`).
-- This ensures that the generated textures and lighting are strictly masked by the displaced polygon's alpha channel, removing rectangular filter artifacts around figures and other elements.
-
-Gemini commit: the filter over the people should clip at the edge of the figures, rather than being seen as rectangles over the people.
+Gemini commit: give the page a title (Feininger Generator?) and a favicon (maybe the guy in a hat) and update and push
