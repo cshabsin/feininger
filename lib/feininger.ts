@@ -571,34 +571,120 @@ export function generateFeiningerV2(width: number, height: number, forceWaldo: b
             blendMode: figBlend
         });
 
-        // 4. Hat
+        // 4. Headgear / Hair
+        const hasHat = Math.random() < 0.4;
         const hatBrimY = headY - headSize * 0.9;
-        shapes.push({
-            id: `man-hat-brim-${i}`,
-            type: 'polygon',
-            points: [
-                {x: posX - headSize * 1.3, y: hatBrimY},
-                {x: posX + headSize * 1.3, y: hatBrimY},
-                {x: posX + headSize * 1.1, y: hatBrimY - 2},
-                {x: posX - headSize * 1.1, y: hatBrimY - 2}
-            ],
-            fill: "#111", 
-            opacity: figOpacity,
-            blendMode: figBlend
-        });
-        shapes.push({
-            id: `man-hat-top-${i}`,
-            type: 'polygon',
-            points: [
-                {x: posX - headSize * 0.7, y: hatBrimY},
-                {x: posX + headSize * 0.7, y: hatBrimY},
-                {x: posX + headSize * 0.6, y: hatBrimY - headSize * 0.7}, 
-                {x: posX - headSize * 0.8, y: hatBrimY - headSize * 0.7}
-            ],
-            fill: "#111",
-            opacity: figOpacity,
-            blendMode: figBlend
-        });
+
+        if (hasHat) {
+            shapes.push({
+                id: `man-hat-brim-${i}`,
+                type: 'polygon',
+                points: [
+                    {x: posX - headSize * 1.3, y: hatBrimY},
+                    {x: posX + headSize * 1.3, y: hatBrimY},
+                    {x: posX + headSize * 1.1, y: hatBrimY - 2},
+                    {x: posX - headSize * 1.1, y: hatBrimY - 2}
+                ],
+                fill: "#111", 
+                opacity: figOpacity,
+                blendMode: figBlend
+            });
+            shapes.push({
+                id: `man-hat-top-${i}`,
+                type: 'polygon',
+                points: [
+                    {x: posX - headSize * 0.7, y: hatBrimY},
+                    {x: posX + headSize * 0.7, y: hatBrimY},
+                    {x: posX + headSize * 0.6, y: hatBrimY - headSize * 0.7}, 
+                    {x: posX - headSize * 0.8, y: hatBrimY - headSize * 0.7}
+                ],
+                fill: "#111",
+                opacity: figOpacity,
+                blendMode: figBlend
+            });
+        } else {
+            // Hair Styles
+            const hairRoll = Math.random();
+            const hairColor = randomChoice(["#2F2F2F", "#3E2723", "#5D4037", "#1C1C1C", "#A9A9A9"]); // Added Grey
+            const hairTopY = headY - headSize * 1.1;
+
+            if (hairRoll < 0.6) {
+                // Short Hair (Cap-like on top)
+                shapes.push({
+                    id: `man-hair-short-${i}`,
+                    type: 'polygon',
+                    points: [
+                        {x: posX - headSize/2, y: headY - headSize * 0.8}, // Sideburn L
+                        {x: posX + headSize/2, y: headY - headSize * 0.8}, // Sideburn R
+                        {x: posX + headSize/2, y: hairTopY}, // Top R
+                        {x: posX - headSize/2, y: hairTopY}, // Top L
+                        {x: posX - headSize/2, y: headY - headSize * 0.8}
+                    ],
+                    fill: hairColor,
+                    opacity: figOpacity,
+                    blendMode: figBlend
+                });
+            } else if (hairRoll < 0.75) {
+                // Long Hair
+                 shapes.push({
+                    id: `man-hair-long-${i}`,
+                    type: 'polygon',
+                    points: [
+                        {x: posX - headSize * 0.55, y: headY - headSize * 0.2}, // Bottom L
+                        {x: posX + headSize * 0.55, y: headY - headSize * 0.2}, // Bottom R
+                        {x: posX + headSize * 0.5, y: hairTopY}, 
+                        {x: posX - headSize * 0.5, y: hairTopY}
+                    ],
+                    fill: hairColor,
+                    opacity: figOpacity,
+                    blendMode: figBlend
+                });
+            } else if (hairRoll < 0.90) {
+                // Balding (Two side tufts)
+                 shapes.push({
+                    id: `man-hair-balding-L-${i}`,
+                    type: 'polygon',
+                    points: [
+                        {x: posX - headSize/2, y: headY - headSize * 0.7},
+                        {x: posX - headSize * 0.2, y: headY - headSize * 0.7},
+                        {x: posX - headSize * 0.2, y: headY - headSize * 1.0},
+                        {x: posX - headSize/2, y: headY - headSize * 0.9}
+                    ],
+                    fill: hairColor,
+                    opacity: figOpacity,
+                    blendMode: figBlend
+                });
+                shapes.push({
+                    id: `man-hair-balding-R-${i}`,
+                    type: 'polygon',
+                    points: [
+                        {x: posX + headSize/2, y: headY - headSize * 0.7},
+                        {x: posX + headSize * 0.2, y: headY - headSize * 0.7},
+                        {x: posX + headSize * 0.2, y: headY - headSize * 1.0},
+                        {x: posX + headSize/2, y: headY - headSize * 0.9}
+                    ],
+                    fill: hairColor,
+                    opacity: figOpacity,
+                    blendMode: figBlend
+                });
+            } else {
+                // Bald (Do nothing, or add a shine/highlight?)
+                // Maybe a slight highlight on top
+                shapes.push({
+                    id: `man-bald-shine-${i}`,
+                    type: 'polygon',
+                    points: [
+                        {x: posX - headSize * 0.2, y: hairTopY + headSize * 0.1},
+                        {x: posX + headSize * 0.2, y: hairTopY + headSize * 0.1},
+                        {x: posX + headSize * 0.1, y: hairTopY + headSize * 0.2},
+                        {x: posX - headSize * 0.1, y: hairTopY + headSize * 0.2}
+                    ],
+                    fill: "#FFF",
+                    opacity: 0.3,
+                    blendMode: figBlend
+                });
+            }
+        }
 
     } else {
         // Woman: Styles
