@@ -46,7 +46,8 @@ const PALETTE_V1 = [
 
 const PALETTE_V2_SKY = ["#A9A9A9", "#778899", "#D3D3D3", "#F0F8FF"];
 const PALETTE_V2_SEA = ["#1E3F5A", "#4682B4", "#5F9EA0", "#2F4F4F"];
-const PALETTE_V2_GROUND = ["#1A1A1A", "#2F2F2F", "#3b3b3b"];
+const PALETTE_V2_GROUND = ["#2F2F2F", "#363636", "#3E3E3E", "#424242", "#483C32", "#3E2723"]; // Reduced contrast, softer darks/browns
+const PALETTE_V2_GRASS = ["#C2B280", "#E4D96F", "#D2B48C", "#8B4513", "#A0522D"]; // Dried grass colors
 const PALETTE_V2_SUNDRESS = ["#CD5C5C", "#DAA520", "#20B2AA", "#D8BFD8", "#F4A460"]; // Muted colorful
 const PALETTE_V2_SUIT = ["#000000", "#2F2F2F", "#3E2723", "#1C1C1C", "#5D4037", "#4E342E", "#795548"];
 
@@ -291,14 +292,14 @@ export function generateFeiningerV2(width: number, height: number, forceWaldo: b
 
       for (let s = 0; s < segments; s++) {
           const sx = s * segmentWidth;
-          const slant = randomRange(-20, 20); 
+          const slant = 0; // Removed slant completely to avoid triangles
           
           shapes.push({
               id: `sea-band-${bandCount}-${s}`,
               type: 'polygon',
               points: [
-                  { x: sx - (s > 0 ? 50 : 0), y: currentY }, 
-                  { x: sx + segmentWidth + (s < segments-1 ? 50 : 0), y: currentY }, 
+                  { x: sx - (s > 0 ? 5 : 0), y: currentY }, 
+                  { x: sx + segmentWidth + (s < segments-1 ? 5 : 0), y: currentY }, 
                   { x: sx + segmentWidth + slant, y: currentY + bandHeight },
                   { x: sx + slant, y: currentY + bandHeight }
               ],
@@ -313,31 +314,95 @@ export function generateFeiningerV2(width: number, height: number, forceWaldo: b
       bandCount++;
   }
 
-  // Ground Texture: Mounds / Dunes
-  // Overlapping curves (approximated by polygons) to give volume to the shore
-  const numMounds = randomInt(3, 6);
-  for (let i = 0; i < numMounds; i++) {
-      const mx = randomRange(0, width);
-      const mWidth = randomRange(width * 0.3, width * 0.6);
+  // Ground Texture: Perspective Facets
+  // Tiles/stones that get smaller towards the horizon
+  let currentGroundY = height;
+  const groundHorizonY = Math.max(groundYLeft, groundYRight);
+  let groundRowCount = 0;
+
+  while (currentGroundY > groundHorizonY) {
+      const distToHorizon = currentGroundY - groundHorizonY;
+      // Row height proportional to distance from horizon (perspective)
+      const rowHeight = Math.max(3, distToHorizon * 0.12); 
       
-      // Interpolate ground Y at mx
-      const t = mx / width;
-      const groundYAtM = groundYLeft * (1-t) + groundYRight * t;
+      const nextY = currentGroundY - rowHeight;
+      if (nextY < groundHorizonY) break; // Don't cross the horizon
+
+      // Number of columns increases as rows get smaller/further away? 
+      // Or just fixed size relative to rowHeight?
+      // Let's make tiles roughly square-ish or rectangular
+      const tileWidthBase = rowHeight * randomRange(1.2, 2.0);
+      const numCols = Math.ceil(width / tileWidthBase) + 2;
+      const colWidth = width / numCols;
       
-      shapes.push({
-          id: `ground-mound-${i}`,
-          type: 'polygon',
-          points: [
-              { x: mx - mWidth/2, y: height }, // Bottom left
-              { x: mx + mWidth/2, y: height }, // Bottom right
-              { x: mx + mWidth * 0.2, y: groundYAtM - randomRange(10, 40) }, // Top right peak
-              { x: mx - mWidth * 0.2, y: groundYAtM - randomRange(10, 40) }  // Top left peak
-          ],
-          fill: randomChoice(PALETTE_V2_GROUND),
-          opacity: randomRange(0.4, 0.7),
-          clipPathId: 'cp-ground',
-          blendMode: 'normal' // Mounds are solid-ish
-      });
+      // Start slightly off-screen to cover edges with jitter
+      const startX = -colWidth;
+
+      for (let c = 0; c < numCols + 2; c++) {
+          const cx = startX + c * colWidth;
+          const jitterX = randomRange(-colWidth * 0.3, colWidth * 0.3);
+          const jitterY = randomRange(-rowHeight * 0.1, rowHeight * 0.1);
+          
+          // Create a trapezoid-ish stone/facet
+          shapes.push({
+              id: `ground-facet-${groundRowCount}-${c}`,
+              type: 'polygon',
+              points: [
+                  { x: cx + jitterX, y: currentGroundY }, // Bottom Left
+                  { x: cx + colWidth + jitterX, y: currentGroundY }, // Bottom Right
+                  { x: cx + colWidth + jitterX * 0.8, y: nextY + jitterY }, // Top Right
+                  { x: cx + jitterX * 0.8, y: nextY + jitterY }  // Top Left
+              ],
+              fill: randomChoice(PALETTE_V2_GROUND),
+              opacity: randomRange(0.6, 0.9),
+              clipPathId: 'cp-ground',
+              blendMode: 'normal' 
+          });
+      }
+      currentGroundY = nextY;
+      groundRowCount++;
+  }
+
+  // Ground Grass Tufts (Sparse, taller)
+  const numTufts = randomInt(3, 8);
+  for (let t = 0; t < numTufts; t++) {
+      const tx = randomRange(0, width);
+      const ty = randomRange(groundHorizonY, height); // Anywhere on ground
+      
+      // Calculate scale based on Y position (perspective)
+      const distToHorizon = ty - groundHorizonY;
+      const maxDist = height - groundHorizonY;
+      // Reduced scaling factor to be more subtle and match figures better
+      const scale = 0.7 + (distToHorizon / maxDist) * 0.6; 
+      
+      const tuftHeight = randomRange(25, 45) * scale;
+      const numBlades = randomInt(5, 12);
+      
+      // Tighter clumping
+      const tuftSpread = 5 * scale;
+
+      for(let b=0; b<numBlades; b++) {
+          const lean = randomRange(-8, 8) * scale; // Less lean variation
+          // Much thinner blades (reeds)
+          const bladeW = randomRange(0.5, 1.2) * scale; 
+          const bladeH = tuftHeight * randomRange(0.85, 1.15);
+          
+          const bladeXOffset = randomRange(-tuftSpread, tuftSpread);
+
+          shapes.push({
+             id: `grass-tuft-${t}-${b}`,
+             type: 'polygon',
+             points: [
+                 { x: tx + bladeXOffset, y: ty }, // Narrow base
+                 { x: tx + bladeXOffset + bladeW, y: ty },
+                 { x: tx + bladeXOffset + lean, y: ty - bladeH } // Sharp tip
+             ],
+             fill: randomChoice(PALETTE_V2_GRASS),
+             opacity: 0.85,
+             clipPathId: 'cp-ground',
+             blendMode: 'normal'
+          });
+      }
   }
 
 
