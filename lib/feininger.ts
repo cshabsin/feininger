@@ -372,24 +372,30 @@ export function generateFeiningerV2(width: number, height: number, forceWaldo: b
       // Calculate scale based on Y position (perspective)
       const distToHorizon = ty - groundHorizonY;
       const maxDist = height - groundHorizonY;
-      const scale = 0.5 + (distToHorizon / maxDist) * 1.5; // larger in foreground
+      // Reduced scaling factor to be more subtle and match figures better
+      const scale = 0.7 + (distToHorizon / maxDist) * 0.6; 
       
-      const tuftHeight = randomRange(20, 50) * scale;
+      const tuftHeight = randomRange(25, 45) * scale;
       const numBlades = randomInt(5, 12);
       
+      // Tighter clumping
+      const tuftSpread = 5 * scale;
+
       for(let b=0; b<numBlades; b++) {
-          const lean = randomRange(-15, 15) * scale;
+          const lean = randomRange(-8, 8) * scale; // Less lean variation
           // Much thinner blades (reeds)
-          const bladeW = randomRange(0.5, 1.5) * scale; 
-          const bladeH = tuftHeight * randomRange(0.8, 1.4);
+          const bladeW = randomRange(0.5, 1.2) * scale; 
+          const bladeH = tuftHeight * randomRange(0.85, 1.15);
           
+          const bladeXOffset = randomRange(-tuftSpread, tuftSpread);
+
           shapes.push({
              id: `grass-tuft-${t}-${b}`,
              type: 'polygon',
              points: [
-                 { x: tx + randomRange(-2, 2) * scale, y: ty }, // Narrow base
-                 { x: tx + randomRange(-2, 2) * scale + bladeW, y: ty },
-                 { x: tx + lean, y: ty - bladeH } // Sharp tip
+                 { x: tx + bladeXOffset, y: ty }, // Narrow base
+                 { x: tx + bladeXOffset + bladeW, y: ty },
+                 { x: tx + bladeXOffset + lean, y: ty - bladeH } // Sharp tip
              ],
              fill: randomChoice(PALETTE_V2_GRASS),
              opacity: 0.85,
