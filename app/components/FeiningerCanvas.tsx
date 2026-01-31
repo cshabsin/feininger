@@ -29,10 +29,10 @@ export const FeiningerCanvas: React.FC<FeiningerCanvasProps> = ({ data }) => {
     ctx.fillRect(0, 0, data.width, data.height);
 
     // Helper: Draw Rough Polygon
-    const drawRoughPolygon = (points: Point[], fill: string, opacity: number, isSea: boolean = false) => {
+    const drawRoughPolygon = (points: Point[], fill: string, opacity: number, isBlurred: boolean = false) => {
       ctx.save();
 
-      if (isSea) {
+      if (isBlurred) {
         ctx.filter = 'blur(2px)';
       }
 
@@ -49,8 +49,8 @@ export const FeiningerCanvas: React.FC<FeiningerCanvasProps> = ({ data }) => {
       ctx.fill();
 
       // Rough Strokes (Simulate hand-drawn edges)
-      // Skip strokes for sea to make it smoother
-      if (!isSea) {
+      // Skip strokes for blurred elements (sea, ground) to make them smoother
+      if (!isBlurred) {
         // We draw 2 passes of strokes with slight jitter
         ctx.strokeStyle = fill;
         ctx.globalAlpha = Math.min(1, opacity * 1.8); // Slightly stronger stroke
@@ -110,8 +110,9 @@ export const FeiningerCanvas: React.FC<FeiningerCanvasProps> = ({ data }) => {
         }
       }
 
-      const isSea = shape.id.includes('sea');
-      drawRoughPolygon(shape.points, shape.fill, shape.opacity, isSea);
+      // Blur sea and ground facets (but not grass or figures)
+      const isBlurred = shape.id.includes('sea') || shape.id.includes('ground-facet');
+      drawRoughPolygon(shape.points, shape.fill, shape.opacity, isBlurred);
 
       ctx.restore();
     });

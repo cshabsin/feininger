@@ -41,7 +41,8 @@ export const FeiningerSVG: React.FC<FeiningerSVGProps> = ({ data }) => {
             <fePointLight x="-5000" y="-10000" z="20000" />
           </feSpecularLighting>
           <feComposite in="light" in2="distorted" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="painted" />
-          <feComposite in="painted" in2="distorted" operator="in" />
+          <feComposite in="painted" in2="distorted" operator="in" result="comp" />
+          <feGaussianBlur in="comp" stdDeviation="1.2" />
         </filter>
 
         {/* Filter 3: Vertical Strokes (Figures, Sails) */}

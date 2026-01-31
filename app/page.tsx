@@ -12,7 +12,7 @@ export default function Home() {
   const [history, setHistory] = useState<FeiningerData[]>([]);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [version, setVersion] = useState<Version>('v2');
-  const [renderMode, setRenderMode] = useState<RenderMode>('svg');
+  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
   const [dimensions] = useState({ width: 800, height: 600 });
 
   const handleGenerate = (targetVersion: Version = version, overrideForceWaldo: boolean = false) => {
