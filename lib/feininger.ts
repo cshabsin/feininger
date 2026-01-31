@@ -47,7 +47,6 @@ const PALETTE_V1 = [
 const PALETTE_V2_SKY = ["#A9A9A9", "#778899", "#D3D3D3", "#F0F8FF"];
 const PALETTE_V2_SEA = ["#1E3F5A", "#4682B4", "#5F9EA0", "#2F4F4F"];
 const PALETTE_V2_GROUND = ["#2F2F2F", "#363636", "#3E3E3E", "#424242", "#483C32", "#3E2723"]; // Reduced contrast, softer darks/browns
-const PALETTE_V2_GRASS = ["#C2B280", "#E4D96F", "#D2B48C", "#8B4513", "#A0522D"]; // Dried grass colors
 const PALETTE_V2_SUNDRESS = ["#CD5C5C", "#DAA520", "#20B2AA", "#D8BFD8", "#F4A460"]; // Muted colorful
 const PALETTE_V2_SUIT = ["#000000", "#2F2F2F", "#3E2723", "#1C1C1C", "#5D4037", "#4E342E", "#795548"];
 
@@ -361,48 +360,6 @@ export function generateFeiningerV2(width: number, height: number, forceWaldo: b
       }
       currentGroundY = nextY;
       groundRowCount++;
-  }
-
-  // Ground Grass Tufts (Sparse, taller)
-  const numTufts = randomInt(3, 8);
-  for (let t = 0; t < numTufts; t++) {
-      const tx = randomRange(0, width);
-      const ty = randomRange(groundHorizonY, height); // Anywhere on ground
-      
-      // Calculate scale based on Y position (perspective)
-      const distToHorizon = ty - groundHorizonY;
-      const maxDist = height - groundHorizonY;
-      // Reduced scaling factor to be more subtle and match figures better
-      const scale = 0.7 + (distToHorizon / maxDist) * 0.6; 
-      
-      const tuftHeight = randomRange(25, 45) * scale;
-      const numBlades = randomInt(5, 12);
-      
-      // Tighter clumping
-      const tuftSpread = 5 * scale;
-
-      for(let b=0; b<numBlades; b++) {
-          const lean = randomRange(-8, 8) * scale; // Less lean variation
-          // Much thinner blades (reeds)
-          const bladeW = randomRange(0.5, 1.2) * scale; 
-          const bladeH = tuftHeight * randomRange(0.85, 1.15);
-          
-          const bladeXOffset = randomRange(-tuftSpread, tuftSpread);
-
-          shapes.push({
-             id: `grass-tuft-${t}-${b}`,
-             type: 'polygon',
-             points: [
-                 { x: tx + bladeXOffset, y: ty }, // Narrow base
-                 { x: tx + bladeXOffset + bladeW, y: ty },
-                 { x: tx + bladeXOffset + lean, y: ty - bladeH } // Sharp tip
-             ],
-             fill: randomChoice(PALETTE_V2_GRASS),
-             opacity: 0.85,
-             clipPathId: 'cp-ground',
-             blendMode: 'normal'
-          });
-      }
   }
 
 
