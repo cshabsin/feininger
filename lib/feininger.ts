@@ -292,14 +292,14 @@ export function generateFeiningerV2(width: number, height: number, forceWaldo: b
 
       for (let s = 0; s < segments; s++) {
           const sx = s * segmentWidth;
-          const slant = 0; // Removed slant completely to avoid triangles
+          const slant = 0; 
           
           shapes.push({
               id: `sea-band-${bandCount}-${s}`,
               type: 'polygon',
               points: [
-                  { x: sx - (s > 0 ? 5 : 0), y: currentY }, 
-                  { x: sx + segmentWidth + (s < segments-1 ? 5 : 0), y: currentY }, 
+                  { x: sx, y: currentY }, 
+                  { x: sx + segmentWidth, y: currentY }, 
                   { x: sx + segmentWidth + slant, y: currentY + bandHeight },
                   { x: sx + slant, y: currentY + bandHeight }
               ],
@@ -310,7 +310,7 @@ export function generateFeiningerV2(width: number, height: number, forceWaldo: b
           });
       }
       
-      currentY += bandHeight * 0.8; 
+      currentY += bandHeight; 
       bandCount++;
   }
 

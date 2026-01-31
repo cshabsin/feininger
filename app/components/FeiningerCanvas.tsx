@@ -29,8 +29,12 @@ export const FeiningerCanvas: React.FC<FeiningerCanvasProps> = ({ data }) => {
     ctx.fillRect(0, 0, data.width, data.height);
 
     // Helper: Draw Rough Polygon
-    const drawRoughPolygon = (points: Point[], fill: string, opacity: number) => {
+    const drawRoughPolygon = (points: Point[], fill: string, opacity: number, isSea: boolean = false) => {
       ctx.save();
+
+      if (isSea) {
+        ctx.filter = 'blur(2px)';
+      }
 
       // Base Fill
       ctx.fillStyle = fill;
@@ -45,27 +49,30 @@ export const FeiningerCanvas: React.FC<FeiningerCanvasProps> = ({ data }) => {
       ctx.fill();
 
       // Rough Strokes (Simulate hand-drawn edges)
-      // We draw 2 passes of strokes with slight jitter
-      ctx.strokeStyle = fill;
-      ctx.globalAlpha = Math.min(1, opacity * 1.8); // Slightly stronger stroke
-      ctx.lineWidth = 0.5;
+      // Skip strokes for sea to make it smoother
+      if (!isSea) {
+        // We draw 2 passes of strokes with slight jitter
+        ctx.strokeStyle = fill;
+        ctx.globalAlpha = Math.min(1, opacity * 1.8); // Slightly stronger stroke
+        ctx.lineWidth = 0.5;
 
-      const passes = 2;
-      for (let k = 0; k < passes; k++) {
-         ctx.beginPath();
-         points.forEach((p, i) => {
-             // Jitter amount
-             const jAmt = 1.5;
-             const jx = (Math.random() - 0.5) * jAmt;
-             const jy = (Math.random() - 0.5) * jAmt;
+        const passes = 2;
+        for (let k = 0; k < passes; k++) {
+           ctx.beginPath();
+           points.forEach((p, i) => {
+               // Jitter amount
+               const jAmt = 1.5;
+               const jx = (Math.random() - 0.5) * jAmt;
+               const jy = (Math.random() - 0.5) * jAmt;
 
-             if (i === 0) ctx.moveTo(p.x + jx, p.y + jy);
-             else ctx.lineTo(p.x + jx, p.y + jy);
-         });
-         // Close loop
-         const p0 = points[0];
-         ctx.lineTo(p0.x + (Math.random() - 0.5) * 1.5, p0.y + (Math.random() - 0.5) * 1.5);
-         ctx.stroke();
+               if (i === 0) ctx.moveTo(p.x + jx, p.y + jy);
+               else ctx.lineTo(p.x + jx, p.y + jy);
+           });
+           // Close loop
+           const p0 = points[0];
+           ctx.lineTo(p0.x + (Math.random() - 0.5) * 1.5, p0.y + (Math.random() - 0.5) * 1.5);
+           ctx.stroke();
+        }
       }
 
       ctx.restore();
@@ -103,7 +110,8 @@ export const FeiningerCanvas: React.FC<FeiningerCanvasProps> = ({ data }) => {
         }
       }
 
-      drawRoughPolygon(shape.points, shape.fill, shape.opacity);
+      const isSea = shape.id.includes('sea');
+      drawRoughPolygon(shape.points, shape.fill, shape.opacity, isSea);
 
       ctx.restore();
     });
