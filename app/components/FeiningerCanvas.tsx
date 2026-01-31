@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { FeiningerData, Point } from '../lib/feininger';
+import { FeiningerData, Point } from '@/lib/feininger';
 
 interface FeiningerCanvasProps {
   data: FeiningerData;
@@ -77,7 +77,9 @@ export const FeiningerCanvas: React.FC<FeiningerCanvasProps> = ({ data }) => {
 
       // Blend Mode
       // Canvas supports: 'source-over', 'multiply', 'screen', 'overlay', 'darken', 'lighten', 'color-dodge', etc.
-      if (shape.blendMode) {
+      if (shape.blendMode === 'normal') {
+        ctx.globalCompositeOperation = 'source-over';
+      } else if (shape.blendMode) {
         ctx.globalCompositeOperation = shape.blendMode;
       } else {
         ctx.globalCompositeOperation = 'multiply';

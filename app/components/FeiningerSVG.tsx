@@ -1,5 +1,5 @@
 import React from 'react';
-import { FeiningerData } from '../lib/feininger';
+import { FeiningerData } from '@/lib/feininger';
 
 interface FeiningerSVGProps {
   data: FeiningerData;
