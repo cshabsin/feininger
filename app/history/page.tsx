@@ -35,7 +35,7 @@ export default function HistoryPage() {
               <div key={`${item.version}-${item.seed}-${index}`} className="border border-white/5 rounded-2xl p-4 bg-black/40 backdrop-blur-sm flex flex-col gap-4 group hover:border-white/10 transition-all duration-500 hover:shadow-2xl">
                 <div className="overflow-hidden rounded-xl border border-white/5 shadow-inner bg-white ring-1 ring-white/5">
                    {item.version === 'gemini3' ? (
-                      <FeiningerGemini3 />
+                      <FeiningerGemini3 data={item} />
                     ) : (
                       <FeiningerSVG data={item} />
                     )

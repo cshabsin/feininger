@@ -10,7 +10,7 @@ export interface Shape {
   fill: string;
   opacity: number;
   clipPathId?: string;
-  blendMode?: 'normal' | 'multiply'; // Simplified for now, can extend
+  blendMode?: 'normal' | 'multiply' | 'screen' | 'overlay' | 'darken' | 'lighten' | 'color-dodge' | 'color-burn' | 'hard-light' | 'soft-light' | 'difference' | 'exclusion';
 }
 
 export interface Region {
@@ -858,14 +858,182 @@ export function generateFeiningerV2(width: number, height: number, forceWaldo: b
     return { width, height, shapes, horizonY, version: 'v2', regions, seed };
   }
   
-  export function generateFeiningerGemini3(width: number, height: number): FeiningerData {
-    return {
-      width,
-      height,
-      shapes: [],
-      horizonY: height / 2,
-      version: 'gemini3',
-      seed: 0
-    };
+  const PALETTE_CALM_DAY_SAILS = [
+  "#ffffff", "#d6cead", "#9ea4ab", "#8d9499", "#e0e3e6", // Whites/Greys
+  "#210e17", "#4a1529", // Plums
+  "#c4281f", "#f04929", "#69100d", // Reds
+  "#f7982a", "#d94a11", "#facc43"  // Oranges/Golds
+];
+
+const PALETTE_CALM_DAY_HULLS = ["#2b2621", "#453d36", "#120504", "#2e0f0c", "#000000"];
+
+function generateBoatShapes(idPrefix: string, x: number, y: number, scale: number, horizonY: number): Shape[] {
+  const shapes: Shape[] = [];
+  const numSails = randomInt(1, 4);
+  const hullWidth = 100 * scale;
+  const hullHeight = 20 * scale;
+  const hullColor = randomChoice(PALETTE_CALM_DAY_HULLS);
+
+  // 1. Hull
+  shapes.push({
+    id: `${idPrefix}-hull-1`,
+    type: 'polygon',
+    points: [
+      { x: x - hullWidth * 0.5, y: y },
+      { x: x + hullWidth * 0.6, y: y },
+      { x: x + hullWidth * 0.4, y: y + hullHeight },
+      { x: x - hullWidth * 0.3, y: y + hullHeight }
+    ],
+    fill: hullColor,
+    opacity: 1
+  });
+
+  shapes.push({
+    id: `${idPrefix}-hull-2`,
+    type: 'polygon',
+    points: [
+      { x: x - hullWidth * 0.5, y: y },
+      { x: x + hullWidth * 0.1, y: y + hullHeight * 0.5 },
+      { x: x - hullWidth * 0.1, y: y + hullHeight * 1.2 },
+      { x: x - hullWidth * 0.3, y: y + hullHeight }
+    ],
+    fill: randomChoice(PALETTE_CALM_DAY_HULLS),
+    opacity: 0.8
+  });
+
+  // 2. Sails
+  for (let i = 0; i < numSails; i++) {
+    const sailWidth = randomRange(40, 100) * scale;
+    const sailHeight = randomRange(100, 400) * scale;
+    const sailX = x + randomRange(-hullWidth * 0.3, hullWidth * 0.3);
+    const sailTopX = sailX + randomRange(-sailWidth, sailWidth);
+    const sailColor = randomChoice(PALETTE_CALM_DAY_SAILS);
+
+    shapes.push({
+      id: `${idPrefix}-sail-${i}`,
+      type: 'polygon',
+      points: [
+        { x: sailX - sailWidth * 0.5, y: y },
+        { x: sailX + sailWidth * 0.5, y: y },
+        { x: sailTopX, y: y - sailHeight }
+      ],
+      fill: sailColor,
+      opacity: randomRange(0.8, 1)
+    });
+
+    // Sub-sail or shadow plane
+    if (Math.random() > 0.5) {
+      shapes.push({
+        id: `${idPrefix}-sail-${i}-shadow`,
+        type: 'polygon',
+        points: [
+          { x: sailTopX, y: y - sailHeight },
+          { x: sailX + sailWidth * 0.7, y: y },
+          { x: sailX + sailWidth * 0.5, y: y }
+        ],
+        fill: randomChoice(PALETTE_CALM_DAY_SAILS),
+        opacity: 0.9
+      });
+    }
   }
+
+  // 3. Reflections
+  const reflectionColor = randomChoice(PALETTE_CALM_DAY_SAILS);
+  shapes.push({
+    id: `${idPrefix}-reflection-1`,
+    type: 'polygon',
+    points: [
+      { x: x - hullWidth * 0.4, y: y + hullHeight },
+      { x: x + hullWidth * 0.5, y: y + hullHeight },
+      { x: x + hullWidth * 0.3, y: y + hullHeight * 6 },
+      { x: x - hullWidth * 0.1, y: y + hullHeight * 5 }
+    ],
+    fill: reflectionColor,
+    opacity: 0.25,
+    blendMode: 'overlay'
+  });
+
+  return shapes;
+}
+
+export function generateFeiningerGemini3(width: number, height: number): FeiningerData {
+  const shapes: Shape[] = [];
+  const horizonY = 900; // Fixed for this style's coordinates
+  const seed = randomInt(1, 1000);
+
+  // Background Prisms (simplified versions of the reference)
+  shapes.push({
+    id: 'bg-left',
+    type: 'polygon',
+    points: [{x: 0, y: 0}, {x: 600, y: 0}, {x: 350, y: 900}, {x: 0, y: 900}],
+    fill: "#141f33", // Simplified sky-blue
+    opacity: 1
+  });
+  shapes.push({
+    id: 'bg-right',
+    type: 'polygon',
+    points: [{x: 600, y: 0}, {x: 800, y: 0}, {x: 800, y: 900}, {x: 350, y: 900}],
+    fill: "#e8a825", // Simplified sky-gold
+    opacity: 1
+  });
+
+  // Sea Base
+  shapes.push({
+    id: 'sea-base-left',
+    type: 'polygon',
+    points: [{x: 0, y: 900}, {x: 450, y: 900}, {x: 400, y: 1200}, {x: 0, y: 1200}],
+    fill: "#3d5452",
+    opacity: 1
+  });
+  shapes.push({
+    id: 'sea-base-right',
+    type: 'polygon',
+    points: [{x: 450, y: 900}, {x: 800, y: 900}, {x: 800, y: 1200}, {x: 400, y: 1200}],
+    fill: "#ad7121",
+    opacity: 1
+  });
+
+  // Sky Shards
+  const skyPalette = ["#18273d", "#335675", "#20334a", "#fad155", "#e08e1b", "#bf4c13"];
+  for (let i = 0; i < 8; i++) {
+    shapes.push({
+      id: `sky-shard-${i}`,
+      type: 'polygon',
+      points: [
+        { x: randomRange(0, 800), y: 0 },
+        { x: randomRange(0, 800), y: 0 },
+        { x: randomRange(0, 800), y: 900 },
+        { x: randomRange(0, 800), y: 900 }
+      ],
+      fill: randomChoice(skyPalette),
+      opacity: randomRange(0.3, 0.7),
+      blendMode: Math.random() > 0.5 ? 'overlay' : 'multiply'
+    });
+  }
+
+  // Generate 3 boats at different depths
+  shapes.push(...generateBoatShapes('distant-boat', 440, 900, 0.3, horizonY));
+  shapes.push(...generateBoatShapes('left-boat', 230, 900, 0.8, horizonY));
+  shapes.push(...generateBoatShapes('right-boat', 650, 910, 1.1, horizonY));
+
+  // Prismatic Rays
+  for (let i = 0; i < 4; i++) {
+    shapes.push({
+      id: `ray-${i}`,
+      type: 'polygon',
+      points: [
+        { x: randomRange(-200, 800), y: -100 },
+        { x: randomRange(0, 1000), y: 1200 },
+        { x: randomRange(0, 1000), y: 1200 },
+        { x: randomRange(-200, 800), y: -100 }
+      ],
+      fill: Math.random() > 0.5 ? "#ffffff" : "#000000",
+      opacity: randomRange(0.05, 0.15),
+      blendMode: Math.random() > 0.5 ? 'overlay' : 'multiply'
+    });
+  }
+
+  return { width: 800, height: 1200, shapes, horizonY, version: 'gemini3', seed };
+}
+
   

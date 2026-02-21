@@ -5,6 +5,7 @@ import { generateFeiningerV1, generateFeiningerV2, generateFeiningerGemini3, Fei
 import { FeiningerSVG } from "../components/FeiningerSVG";
 import { FeiningerCanvas } from "../components/FeiningerCanvas";
 import { FeiningerGemini3 } from "../components/FeiningerGemini3";
+import { FeiningerGemini3Canvas } from "../components/FeiningerGemini3Canvas";
 import { useHistory } from "../context/HistoryContext";
 import { RefreshCw, Box, FileCode, Play } from "lucide-react";
 
@@ -41,7 +42,7 @@ export default function VersionClient({ version }: { version: Version }) {
      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [version]);
 
-  const showRenderToggle = version !== 'gemini3';
+  const showRenderToggle = true;
 
   return (
     <div className="flex-1 h-screen flex flex-col relative overflow-y-auto bg-[radial-gradient(circle_at_50%_0%,rgba(30,41,59,0.15),transparent)]">
@@ -99,7 +100,7 @@ export default function VersionClient({ version }: { version: Version }) {
             {currentData ? (
               <>
                 {currentData.version === 'gemini3' ? (
-                  <FeiningerGemini3 />
+                  renderMode === 'svg' ? <FeiningerGemini3 data={currentData} /> : <FeiningerGemini3Canvas data={currentData} />
                 ) : renderMode === 'svg' ? (
                    <FeiningerSVG data={currentData} />
                 ) : (
@@ -123,7 +124,7 @@ export default function VersionClient({ version }: { version: Version }) {
          <div className="flex flex-col items-center">
            <span className="text-[10px] uppercase tracking-tighter mb-1">Renderer</span>
            <span className="text-sm font-semibold text-neutral-300">
-             {currentData?.version === 'gemini3' ? 'SVG' : renderMode.toUpperCase()}
+             {renderMode.toUpperCase()}
            </span>
          </div>
          <div className="flex flex-col items-center">
