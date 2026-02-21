@@ -11,6 +11,18 @@ export const FeiningerGemini3: React.FC = () => {
       style={{ backgroundColor: '#111827' }}
     >
       <defs>
+        {/* Mask to occlude things behind the front (red) boat */}
+        <mask id="red-boat-occlusion-mask">
+          <rect x="0" y="0" width="800" height="1200" fill="white" />
+          <g>
+            <animateTransform attributeName="transform" type="translate" values="0,0; -1000,0; 500,0; 0,0" keyTimes="0; 0.692; 0.693; 1" dur="90s" repeatCount="indefinite" additive="sum" />
+            <animateTransform attributeName="transform" type="translate" values="0,0; 0,20; 0,0" dur="9s" repeatCount="indefinite" additive="sum" />
+            {/* The occlusion area: red boat hull and its main reflection */}
+            <polygon points="520,900 800,895 750,960 550,940" fill="black" />
+            <polygon points="550,940 750,960 700,1150 580,1120" fill="black" />
+          </g>
+        </mask>
+
         {/* Background Gradients */}
         <linearGradient id="sky-blue" x1="0%" y1="0%" x2="50%" y2="100%">
           <stop offset="0%" stopColor="#141f33" />
@@ -128,9 +140,11 @@ export const FeiningerGemini3: React.FC = () => {
         <polygon points="110,890 340,900 290,930 130,920" fill="#2b2621" />
         <polygon points="110,890 200,905 180,925 130,920" fill="#453d36" opacity="0.8" />
         
-        {/* Reflections */}
-        <polygon points="130,920 290,930 260,1100 160,1060" fill="#cfc8ab" opacity="0.3" />
-        <polygon points="180,925 250,928 230,1020 190,1000" fill="#ffffff" opacity="0.2" />
+        {/* Reflections (Occluded by red boat in foreground) */}
+        <g mask="url(#red-boat-occlusion-mask)">
+          <polygon points="130,920 290,930 260,1100 160,1060" fill="#cfc8ab" opacity="0.3" />
+          <polygon points="180,925 250,928 230,1020 190,1000" fill="#ffffff" opacity="0.2" />
+        </g>
         
         {/* Architectural Rigging / Light Lines */}
         <line x1="230" y1="300" x2="210" y2="50" stroke="#ffffff" opacity="0.3" strokeWidth="2" />
