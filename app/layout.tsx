@@ -17,6 +17,8 @@ export const metadata: Metadata = {
   description: "A generative art experiment inspired by Lyonel Feininger",
 };
 
+import { HistoryProvider } from "./context/HistoryContext";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -27,7 +29,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <HistoryProvider>{children}</HistoryProvider>
       </body>
     </html>
   );

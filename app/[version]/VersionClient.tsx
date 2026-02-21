@@ -6,13 +6,15 @@ import { generateFeiningerV1, generateFeiningerV2, generateFeiningerGemini3, Fei
 import { FeiningerSVG } from "../components/FeiningerSVG";
 import { FeiningerCanvas } from "../components/FeiningerCanvas";
 import { FeiningerGemini3 } from "../components/FeiningerGemini3";
-import { Ship, Users, Waves, Box, FileCode, Play, ChevronLeft, ChevronRight, RefreshCw } from "lucide-react";
+import { useHistory } from "../context/HistoryContext";
+import { Ship, Users, Waves, Box, FileCode, Play, RefreshCw, Image } from "lucide-react";
 
 type Version = 'v1' | 'v2' | 'gemini3';
 type RenderMode = 'svg' | 'canvas';
 
-// Helper to generate the first piece of data for a version
-const getInitialData = (version: Version, dimensions: {width: number, height: number}): FeiningerData => {
+
+// Helper to generate new data
+const getNewData = (version: Version, dimensions: {width: number, height: number}, override: boolean): FeiningerData => {
   switch (version) {
     case 'v1':
       return generateFeiningerV1(dimensions.width, dimensions.height);
@@ -20,44 +22,31 @@ const getInitialData = (version: Version, dimensions: {width: number, height: nu
       return generateFeiningerGemini3(dimensions.width, dimensions.height);
     case 'v2':
     default:
-      return generateFeiningerV2(dimensions.width, dimensions.height);
+      return generateFeiningerV2(dimensions.width, dimensions.height, override);
   }
 }
 
 export default function VersionClient({ version }: { version: Version }) {
   const [dimensions] = useState({ width: 800, height: 600 });
   
-  // By initializing state with a function, we ensure it's derived correctly
-  // on the first render after the component re-mounts (due to the key change).
-  const [history, setHistory] = useState<FeiningerData[]>(() => [getInitialData(version, dimensions)]);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  // Local state is now only for the *currently* displayed image.
+  const [currentData, setCurrentData] = useState<FeiningerData | null>(null);
+  const { addToHistory } = useHistory();
   
-  // The render mode is also derived from the version prop.
   const [renderMode, setRenderMode] = useState<RenderMode>(() => version === 'gemini3' ? 'svg' : 'canvas');
 
-  const handleGenerate = (targetVersion: Version = version, overrideForceWaldo: boolean = false) => {
-    const newData = getInitialData(targetVersion, dimensions);
-    
-    // When generating a new image, we append to the history of the current version.
-    // The slice correctly truncates any "future" history if we've gone back.
-    const newHistory = [...history.slice(0, currentIndex + 1), newData];
-    setHistory(newHistory);
-    setCurrentIndex(newHistory.length - 1);
+  const handleGenerate = (overrideForceWaldo: boolean = false) => {
+    const newData = getNewData(version, dimensions, overrideForceWaldo);
+    setCurrentData(newData);
+    addToHistory(newData);
   };
 
-  const handlePrevious = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
-  };
+  // Generate the first image when the component mounts.
+  useEffect(() => {
+    handleGenerate();
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const handleNext = () => {
-    if (currentIndex < history.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    }
-  };
-
-  const currentData = history[currentIndex];
   const showRenderToggle = version !== 'gemini3';
 
   return (
@@ -104,14 +93,14 @@ export default function VersionClient({ version }: { version: Version }) {
           <div className="h-px bg-white/5 my-2 mx-3 hidden lg:block" />
 
           <Link
-            href="/gemini3"
-            className={`flex items-center gap-4 px-4 py-4 rounded-2xl transition-all duration-300 group ${version === 'gemini3' ? 'bg-white/10 text-white shadow-2xl border border-white/10' : 'text-neutral-500 hover:bg-white/5 hover:text-neutral-300 border border-transparent'}`}
-            title="Gemini 3.1 Pro"
+            href="/history"
+            className="flex items-center gap-4 px-4 py-4 rounded-2xl transition-all duration-300 group text-neutral-500 hover:bg-white/5 hover:text-neutral-300 border border-transparent"
+            title="History"
           >
-            <Waves className={`w-5 h-5 transition-transform duration-500 ${version === 'gemini3' ? 'text-slate-400 scale-110' : 'group-hover:text-neutral-400'}`} />
+            <Image className="w-5 h-5" />
             <div className="flex flex-col items-start leading-none hidden lg:flex">
-              <span className="font-bold text-sm line-clamp-1">Gemini 3.1</span>
-              <span className="text-[10px] opacity-40 mt-1.5 font-mono uppercase">Reference Art</span>
+              <span className="font-bold text-sm">History</span>
+              <span className="text-[10px] opacity-40 mt-1.5 font-mono uppercase">View Generated Art</span>
             </div>
           </Link>
         </nav>
@@ -159,28 +148,8 @@ export default function VersionClient({ version }: { version: Version }) {
           </div>
 
           <div className="flex items-center gap-6">
-            <div className="flex bg-black/40 rounded-xl p-1.5 border border-white/5">
-               <button 
-                 onClick={handlePrevious} 
-                 disabled={currentIndex <= 0}
-                 className="p-2.5 hover:bg-white/5 disabled:opacity-10 rounded-lg transition-all text-neutral-400 active:scale-90"
-               >
-                 <ChevronLeft className="w-5 h-5" />
-               </button>
-               <div className="px-4 flex items-center text-xs font-mono font-bold text-neutral-400 tabular-nums">
-                 {currentIndex + 1} <span className="mx-2 opacity-20">/</span> {history.length}
-               </div>
-               <button 
-                 onClick={handleNext} 
-                 disabled={currentIndex >= history.length - 1}
-                 className="p-2.5 hover:bg-white/5 disabled:opacity-10 rounded-lg transition-all text-neutral-400 active:scale-90"
-               >
-                 <ChevronRight className="w-5 h-5" />
-               </button>
-            </div>
-
             <button 
-               onClick={(e) => handleGenerate(version, e.shiftKey)} 
+               onClick={(e) => handleGenerate(e.shiftKey)} 
                className="flex items-center gap-3 px-8 py-3.5 bg-white text-black hover:bg-neutral-200 rounded-2xl font-black transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] active:scale-95 uppercase tracking-tighter text-sm"
             >
                <RefreshCw className="w-4 h-4" />
