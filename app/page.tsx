@@ -5,6 +5,7 @@ import { generateFeiningerV1, generateFeiningerV2, generateFeiningerGemini3, Fei
 import { FeiningerSVG } from "./components/FeiningerSVG";
 import { FeiningerCanvas } from "./components/FeiningerCanvas";
 import { FeiningerGemini3 } from "./components/FeiningerGemini3";
+import { Ship, Users, Waves, Box, FileCode, Play, ChevronLeft, ChevronRight, RefreshCw } from "lucide-react";
 
 type Version = 'v1' | 'v2' | 'gemini3';
 type RenderMode = 'svg' | 'canvas';
@@ -50,118 +51,170 @@ export default function Home() {
   };
 
   const currentData = history[currentIndex];
+  const showRenderToggle = version !== 'gemini3';
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-start lg:justify-between p-8 pb-32 lg:pt-8 bg-neutral-900 text-neutral-200">
-      <div className="max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Feininger Generator &nbsp;
-          <span className="font-bold">Prismatism</span>
-        </p>
-
-        <div className="fixed bottom-0 left-0 flex h-auto w-full flex-col items-center justify-end bg-gradient-to-t from-white via-white dark:from-black dark:via-black pb-4 lg:static lg:h-auto lg:w-auto lg:bg-none lg:pb-0 lg:flex-col lg:items-end lg:justify-center z-10">
-          
-          <div className="flex flex-row gap-2 mb-4">
-            {/* Version Selector */}
-            <div className="flex bg-neutral-800 rounded-lg p-1 border border-neutral-700 pointer-events-auto z-10">
-                  <button
-                      onClick={() => { setVersion('v1'); handleGenerate('v1'); }}
-                      className={`px-3 py-1 rounded text-xs transition ${version === 'v1' ? 'bg-neutral-600 text-white font-bold' : 'text-neutral-400 hover:text-white'}`}
-                  >
-                      V1: Sails
-                  </button>
-                  <button
-                      onClick={(e) => { setVersion('v2'); handleGenerate('v2', e.shiftKey); }}
-                      className={`px-3 py-1 rounded text-xs transition ${version === 'v2' ? 'bg-neutral-600 text-white font-bold' : 'text-neutral-400 hover:text-white'}`}
-                  >
-                      V2: Figures
-                  </button>
-                  <button
-                      onClick={() => { setVersion('gemini3'); handleGenerate('gemini3'); }}
-                      className={`px-3 py-1 rounded text-xs transition ${version === 'gemini3' ? 'bg-neutral-600 text-white font-bold' : 'text-neutral-400 hover:text-white'}`}
-                  >
-                      Calm Day At Sea (Gemini 3.1 pro)
-                  </button>
-            </div>
-
-            {/* Render Mode Selector */}
-            <div className="flex bg-neutral-800 rounded-lg p-1 border border-neutral-700 pointer-events-auto z-10">
-                  <button
-                      onClick={() => setRenderMode('svg')}
-                      className={`px-3 py-1 rounded text-xs transition ${renderMode === 'svg' ? 'bg-neutral-600 text-white font-bold' : 'text-neutral-400 hover:text-white'}`}
-                  >
-                      SVG
-                  </button>
-                  <button
-                      onClick={() => setRenderMode('canvas')}
-                      className={`px-3 py-1 rounded text-xs transition ${renderMode === 'canvas' ? 'bg-neutral-600 text-white font-bold' : 'text-neutral-400 hover:text-white'}`}
-                  >
-                      Canvas
-                  </button>
-            </div>
+    <div className="flex h-screen bg-neutral-950 text-neutral-200 overflow-hidden">
+      {/* Left Sidebar */}
+      <aside className="w-20 lg:w-64 border-r border-neutral-800 bg-neutral-900 flex flex-col items-center lg:items-stretch p-4 gap-8">
+        <div className="flex items-center gap-3 px-2 py-4 border-b border-neutral-800 w-full mb-4">
+          <div className="p-2 bg-slate-700 rounded-lg">
+             <Box className="w-6 h-6 text-white" />
           </div>
-
-          <div className="flex gap-4 pointer-events-auto">
-             <button 
-               onClick={handlePrevious} 
-               disabled={currentIndex <= 0}
-               className="px-4 py-2 bg-neutral-800 hover:bg-neutral-700 disabled:opacity-50 rounded border border-neutral-700 transition"
-             >
-               Previous
-             </button>
-             <button 
-               onClick={(e) => handleGenerate(version, e.shiftKey)} 
-               className="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded border border-slate-500 font-bold transition text-white"
-             >
-               Generate New
-             </button>
-             <button 
-               onClick={handleNext} 
-               disabled={currentIndex >= history.length - 1}
-               className="px-4 py-2 bg-neutral-800 hover:bg-neutral-700 disabled:opacity-50 rounded border border-neutral-700 transition"
-             >
-               Next
-             </button>
-          </div>
+          <span className="font-bold text-lg hidden lg:block tracking-tight">Feininger</span>
         </div>
-      </div>
 
-      <div className="relative flex place-items-center justify-center p-4">
-        {currentData ? (
-          <div className="border-8 border-neutral-800 shadow-2xl bg-white">
-            {currentData.version === 'gemini3' ? (
-              <FeiningerGemini3 />
-            ) : renderMode === 'svg' ? (
-               <FeiningerSVG data={currentData} />
-            ) : (
-               <FeiningerCanvas data={currentData} />
-            )}
-          </div>
-        ) : (
-          <div className="flex items-center justify-center h-[600px] w-[800px] border border-dashed border-neutral-700 text-neutral-500">
-            Generating...
+        <nav className="flex flex-col gap-2 w-full flex-1">
+          <p className="text-[10px] uppercase tracking-widest text-neutral-500 font-bold px-3 mb-2 hidden lg:block">Versions</p>
+          
+          <button
+            onClick={() => { setVersion('v1'); handleGenerate('v1'); }}
+            className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all group ${version === 'v1' ? 'bg-slate-800 text-white shadow-lg border border-slate-700' : 'text-neutral-500 hover:bg-neutral-800 hover:text-neutral-300'}`}
+            title="V1: Sails"
+          >
+            <Ship className={`w-5 h-5 ${version === 'v1' ? 'text-slate-400' : 'group-hover:text-neutral-400'}`} />
+            <div className="flex flex-col items-start leading-none hidden lg:flex">
+              <span className="font-semibold text-sm">V1: Sails</span>
+              <span className="text-[10px] opacity-50 mt-1">Prismatism</span>
+            </div>
+          </button>
+
+          <button
+            onClick={(e) => { setVersion('v2'); handleGenerate('v2', e.shiftKey); }}
+            className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all group ${version === 'v2' ? 'bg-slate-800 text-white shadow-lg border border-slate-700' : 'text-neutral-500 hover:bg-neutral-800 hover:text-neutral-300'}`}
+            title="V2: Figures"
+          >
+            <Users className={`w-5 h-5 ${version === 'v2' ? 'text-slate-400' : 'group-hover:text-neutral-400'}`} />
+            <div className="flex flex-col items-start leading-none hidden lg:flex">
+              <span className="font-semibold text-sm">V2: Figures</span>
+              <span className="text-[10px] opacity-50 mt-1">Intentional</span>
+            </div>
+          </button>
+
+          <button
+            onClick={() => { setVersion('gemini3'); handleGenerate('gemini3'); }}
+            className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all group ${version === 'gemini3' ? 'bg-slate-800 text-white shadow-lg border border-slate-700' : 'text-neutral-500 hover:bg-neutral-800 hover:text-neutral-300'}`}
+            title="Gemini 3.1 Pro"
+          >
+            <Waves className={`w-5 h-5 ${version === 'gemini3' ? 'text-slate-400' : 'group-hover:text-neutral-400'}`} />
+            <div className="flex flex-col items-start leading-none hidden lg:flex">
+              <span className="font-semibold text-sm line-clamp-1">Gemini 3.1</span>
+              <span className="text-[10px] opacity-50 mt-1 uppercase">Reference</span>
+            </div>
+          </button>
+        </nav>
+
+        {/* Conditional Toggle */}
+        {showRenderToggle && (
+          <div className="w-full pt-6 border-t border-neutral-800 mt-auto">
+            <p className="text-[10px] uppercase tracking-widest text-neutral-500 font-bold px-3 mb-4 hidden lg:block">Renderer</p>
+            <div className="flex bg-neutral-950 p-1 rounded-xl border border-neutral-800 relative">
+               <div 
+                 className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-slate-700 rounded-lg transition-transform duration-200 ease-out ${renderMode === 'canvas' ? 'translate-x-full' : 'translate-x-0'}`}
+               />
+               <button 
+                 onClick={() => setRenderMode('svg')}
+                 className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs font-bold z-10 transition-colors ${renderMode === 'svg' ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
+               >
+                 <FileCode className="w-3.5 h-3.5" />
+                 <span className="hidden lg:block">SVG</span>
+               </button>
+               <button 
+                 onClick={() => setRenderMode('canvas')}
+                 className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs font-bold z-10 transition-colors ${renderMode === 'canvas' ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
+               >
+                 <Play className="w-3.5 h-3.5" />
+                 <span className="hidden lg:block">Canvas</span>
+               </button>
+            </div>
           </div>
         )}
-      </div>
+      </aside>
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-         <div className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-neutral-700 hover:bg-neutral-800/30">
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Mode{' '}
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            {currentData ? (currentData.version === 'v1' ? 'Sails / Prismatism' : currentData.version === 'gemini3' ? 'Gemini 3.1 / Reference' : 'Figures / Intentional') : '-'}
-          </p>
+      {/* Main Content */}
+      <main className="flex-1 flex flex-col relative overflow-y-auto">
+        <header className="flex items-center justify-between p-6 border-b border-neutral-900 bg-neutral-950/50 backdrop-blur-md sticky top-0 z-20">
+          <div>
+            <h1 className="text-xl font-bold tracking-tight">Prismatism</h1>
+            <p className="text-xs text-neutral-500 font-mono">
+              {currentData?.version === 'v1' ? 'LYONEL FEININGER STYLE - V1' : currentData?.version === 'v2' ? 'LYONEL FEININGER STYLE - V2' : 'GEMINI 3.1 REFERENCE'}
+            </p>
+          </div>
+
+          <div className="flex gap-2">
+            <div className="flex bg-neutral-900 rounded-lg p-1 border border-neutral-800 mr-4">
+               <button 
+                 onClick={handlePrevious} 
+                 disabled={currentIndex <= 0}
+                 className="p-2 hover:bg-neutral-800 disabled:opacity-20 rounded-md transition text-neutral-400"
+               >
+                 <ChevronLeft className="w-5 h-5" />
+               </button>
+               <div className="px-3 flex items-center text-xs font-mono text-neutral-500 tabular-nums">
+                 {currentIndex + 1} / {history.length}
+               </div>
+               <button 
+                 onClick={handleNext} 
+                 disabled={currentIndex >= history.length - 1}
+                 className="p-2 hover:bg-neutral-800 disabled:opacity-20 rounded-md transition text-neutral-400"
+               >
+                 <ChevronRight className="w-5 h-5" />
+               </button>
+            </div>
+
+            <button 
+               onClick={(e) => handleGenerate(version, e.shiftKey)} 
+               className="flex items-center gap-2 px-5 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg font-bold transition text-white shadow-lg shadow-slate-900/50 border border-slate-600 active:scale-95"
+            >
+               <RefreshCw className="w-4 h-4" />
+               Generate
+            </button>
+          </div>
+        </header>
+
+        <div className="flex-1 flex items-center justify-center p-12">
+          <div className="relative group">
+            {/* Frame shadow/glow */}
+            <div className="absolute -inset-1 bg-gradient-to-r from-slate-800 to-neutral-800 rounded-lg blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+            
+            <div className="relative border-[12px] border-neutral-900 shadow-2xl bg-white overflow-hidden rounded-sm ring-1 ring-neutral-800">
+              {currentData ? (
+                <>
+                  {currentData.version === 'gemini3' ? (
+                    <FeiningerGemini3 />
+                  ) : renderMode === 'svg' ? (
+                     <FeiningerSVG data={currentData} />
+                  ) : (
+                     <FeiningerCanvas data={currentData} />
+                  )}
+                </>
+              ) : (
+                <div className="flex items-center justify-center h-[600px] w-[800px] bg-neutral-900 text-neutral-700 animate-pulse">
+                  <Box className="w-12 h-12" />
+                </div>
+              )}
+            </div>
+          </div>
         </div>
-         <div className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-neutral-700 hover:bg-neutral-800/30">
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Renderer{' '}
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            {currentData?.version === 'gemini3' ? 'SVG (REFERENCE)' : renderMode.toUpperCase()}
-          </p>
-        </div>
-      </div>
-    </main>
+
+        {/* Footer info bars */}
+        <footer className="p-8 border-t border-neutral-900 flex justify-center gap-12 text-neutral-500">
+           <div className="flex flex-col items-center">
+             <span className="text-[10px] uppercase tracking-tighter mb-1">Architecture</span>
+             <span className="text-sm font-semibold text-neutral-300 uppercase">{currentData?.version || '-'}</span>
+           </div>
+           <div className="flex flex-col items-center">
+             <span className="text-[10px] uppercase tracking-tighter mb-1">Renderer</span>
+             <span className="text-sm font-semibold text-neutral-300">
+               {currentData?.version === 'gemini3' ? 'SVG' : renderMode.toUpperCase()}
+             </span>
+           </div>
+           <div className="flex flex-col items-center">
+             <span className="text-[10px] uppercase tracking-tighter mb-1">Resolution</span>
+             <span className="text-sm font-semibold text-neutral-300">800 &times; 600</span>
+           </div>
+        </footer>
+      </main>
+    </div>
   );
 }
