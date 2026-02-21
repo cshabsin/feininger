@@ -54,7 +54,7 @@ export default function VersionClient({ version }: { version: Version }) {
   const showRenderToggle = version !== 'gemini3';
 
   return (
-    <div className="flex h-screen bg-neutral-950 text-neutral-200 overflow-hidden font-sans">
+    <div key={version} className="flex h-screen bg-neutral-950 text-neutral-200 overflow-hidden font-sans">
       {/* Left Sidebar */}
       <aside className="w-20 lg:w-72 border-r border-white/5 bg-neutral-900/50 backdrop-blur-xl flex flex-col p-4 gap-8">
         <div className="flex items-center gap-3 px-3 py-6 border-b border-white/5 w-full mb-2">
