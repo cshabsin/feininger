@@ -12,7 +12,6 @@ import { Ship, Users, Waves, Box, FileCode, Play, RefreshCw, Image } from "lucid
 type Version = 'v1' | 'v2' | 'gemini3';
 type RenderMode = 'svg' | 'canvas';
 
-
 // Helper to generate new data
 const getNewData = (version: Version, dimensions: {width: number, height: number}, override: boolean): FeiningerData => {
   switch (version) {
@@ -25,6 +24,7 @@ const getNewData = (version: Version, dimensions: {width: number, height: number
       return generateFeiningerV2(dimensions.width, dimensions.height, override);
   }
 }
+
 
 export default function VersionClient({ version }: { version: Version }) {
   const [dimensions] = useState({ width: 800, height: 600 });
@@ -87,6 +87,18 @@ export default function VersionClient({ version }: { version: Version }) {
             <div className="flex flex-col items-start leading-none hidden lg:flex">
               <span className="font-bold text-sm">V2: Figures</span>
               <span className="text-[10px] opacity-40 mt-1.5 font-mono">Intentional Forms</span>
+            </div>
+          </Link>
+
+          <Link
+            href="/gemini3"
+            className={`flex items-center gap-4 px-4 py-4 rounded-2xl transition-all duration-300 group ${version === 'gemini3' ? 'bg-white/10 text-white shadow-2xl border border-white/10' : 'text-neutral-500 hover:bg-white/5 hover:text-neutral-300 border border-transparent'}`}
+            title="Gemini 3.1 Pro"
+          >
+            <Waves className={`w-5 h-5 transition-transform duration-500 ${version === 'gemini3' ? 'text-slate-400 scale-110' : 'group-hover:text-neutral-400'}`} />
+            <div className="flex flex-col items-start leading-none hidden lg:flex">
+              <span className="font-bold text-sm line-clamp-1">Gemini 3.1</span>
+              <span className="text-[10px] opacity-40 mt-1.5 font-mono uppercase">Reference Art</span>
             </div>
           </Link>
 
