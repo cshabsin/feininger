@@ -25,7 +25,7 @@ export interface FeiningerData {
   height: number;
   shapes: Shape[];
   horizonY: number;
-  version: 'v1' | 'v2';
+  version: 'v1' | 'v2' | 'gemini3';
   regions?: Region[];
   seed: number;
 }
@@ -854,5 +854,18 @@ export function generateFeiningerV2(width: number, height: number, forceWaldo: b
      });
   }
 
-  return { width, height, shapes, horizonY, version: 'v2', regions, seed };
-}
+  
+    return { width, height, shapes, horizonY, version: 'v2', regions, seed };
+  }
+  
+  export function generateFeiningerGemini3(width: number, height: number): FeiningerData {
+    return {
+      width,
+      height,
+      shapes: [],
+      horizonY: height / 2,
+      version: 'gemini3',
+      seed: 0
+    };
+  }
+  

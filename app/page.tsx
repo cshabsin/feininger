@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { generateFeiningerV1, generateFeiningerV2, FeiningerData } from "../lib/feininger";
+import { generateFeiningerV1, generateFeiningerV2, generateFeiningerGemini3, FeiningerData } from "../lib/feininger";
 import { FeiningerSVG } from "./components/FeiningerSVG";
 import { FeiningerCanvas } from "./components/FeiningerCanvas";
+import { FeiningerGemini3 } from "./components/FeiningerGemini3";
 
-type Version = 'v1' | 'v2';
+type Version = 'v1' | 'v2' | 'gemini3';
 type RenderMode = 'svg' | 'canvas';
 
 export default function Home() {
@@ -19,6 +20,8 @@ export default function Home() {
     let newData: FeiningerData;
     if (targetVersion === 'v1') {
       newData = generateFeiningerV1(dimensions.width, dimensions.height);
+    } else if (targetVersion === 'gemini3') {
+      newData = generateFeiningerGemini3(dimensions.width, dimensions.height);
     } else {
       newData = generateFeiningerV2(dimensions.width, dimensions.height, overrideForceWaldo);
     }
@@ -73,6 +76,12 @@ export default function Home() {
                   >
                       V2: Figures
                   </button>
+                  <button
+                      onClick={() => { setVersion('gemini3'); handleGenerate('gemini3'); }}
+                      className={`px-3 py-1 rounded text-xs transition ${version === 'gemini3' ? 'bg-neutral-600 text-white font-bold' : 'text-neutral-400 hover:text-white'}`}
+                  >
+                      Calm Day At Sea (Gemini 3.1 pro)
+                  </button>
             </div>
 
             {/* Render Mode Selector */}
@@ -120,7 +129,9 @@ export default function Home() {
       <div className="relative flex place-items-center justify-center p-4">
         {currentData ? (
           <div className="border-8 border-neutral-800 shadow-2xl bg-white">
-            {renderMode === 'svg' ? (
+            {currentData.version === 'gemini3' ? (
+              <FeiningerGemini3 />
+            ) : renderMode === 'svg' ? (
                <FeiningerSVG data={currentData} />
             ) : (
                <FeiningerCanvas data={currentData} />
@@ -139,7 +150,7 @@ export default function Home() {
             Mode{' '}
           </h2>
           <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            {currentData ? (currentData.version === 'v1' ? 'Sails / Prismatism' : 'Figures / Intentional') : '-'}
+            {currentData ? (currentData.version === 'v1' ? 'Sails / Prismatism' : currentData.version === 'gemini3' ? 'Gemini 3.1 / Reference' : 'Figures / Intentional') : '-'}
           </p>
         </div>
          <div className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-neutral-700 hover:bg-neutral-800/30">
@@ -147,7 +158,7 @@ export default function Home() {
             Renderer{' '}
           </h2>
           <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            {renderMode.toUpperCase()}
+            {currentData?.version === 'gemini3' ? 'SVG (REFERENCE)' : renderMode.toUpperCase()}
           </p>
         </div>
       </div>
