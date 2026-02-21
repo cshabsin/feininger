@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 };
 
 import { HistoryProvider } from "./context/HistoryContext";
+import { Sidebar } from "./components/Sidebar";
 
 export default function RootLayout({
   children,
@@ -27,9 +28,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-neutral-950`}
       >
-        <HistoryProvider>{children}</HistoryProvider>
+        <HistoryProvider>
+          <div className="flex h-screen overflow-hidden">
+            <Sidebar />
+            <main className="flex-1 h-screen overflow-hidden">
+              {children}
+            </main>
+          </div>
+        </HistoryProvider>
       </body>
     </html>
   );

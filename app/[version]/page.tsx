@@ -10,6 +10,7 @@ export async function generateStaticParams() {
   ]
 }
 
-export default function VersionPage({ params }: { params: { version: Version } }) {
-  return <VersionClient key={params.version} version={params.version} />;
+export default async function VersionPage({ params }: { params: Promise<{ version: Version }> }) {
+  const { version } = await params;
+  return <VersionClient key={version} version={version} />;
 }
