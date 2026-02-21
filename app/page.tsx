@@ -54,109 +54,130 @@ export default function Home() {
   const showRenderToggle = version !== 'gemini3';
 
   return (
-    <div className="flex h-screen bg-neutral-950 text-neutral-200 overflow-hidden">
+    <div className="flex h-screen bg-neutral-950 text-neutral-200 overflow-hidden font-sans">
       {/* Left Sidebar */}
-      <aside className="w-20 lg:w-64 border-r border-neutral-800 bg-neutral-900 flex flex-col items-center lg:items-stretch p-4 gap-8">
-        <div className="flex items-center gap-3 px-2 py-4 border-b border-neutral-800 w-full mb-4">
-          <div className="p-2 bg-slate-700 rounded-lg">
+      <aside className="w-20 lg:w-72 border-r border-white/5 bg-neutral-900/50 backdrop-blur-xl flex flex-col p-4 gap-8">
+        <div className="flex items-center gap-3 px-3 py-6 border-b border-white/5 w-full mb-2">
+          <div className="p-2 bg-gradient-to-br from-slate-600 to-slate-800 rounded-xl shadow-inner">
              <Box className="w-6 h-6 text-white" />
           </div>
-          <span className="font-bold text-lg hidden lg:block tracking-tight">Feininger</span>
+          <div className="flex flex-col hidden lg:flex">
+            <span className="font-bold text-lg tracking-tight leading-none">Feininger</span>
+            <span className="text-[10px] text-neutral-500 font-mono mt-1 uppercase tracking-widest">Prismatism Lab</span>
+          </div>
         </div>
 
-        <nav className="flex flex-col gap-2 w-full flex-1">
-          <p className="text-[10px] uppercase tracking-widest text-neutral-500 font-bold px-3 mb-2 hidden lg:block">Versions</p>
+        <nav className="flex flex-col gap-3 w-full flex-1">
+          <p className="text-[10px] uppercase tracking-[0.2em] text-neutral-500 font-bold px-3 mb-1 hidden lg:block opacity-50">Collection</p>
           
           <button
             onClick={() => { setVersion('v1'); handleGenerate('v1'); }}
-            className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all group ${version === 'v1' ? 'bg-slate-800 text-white shadow-lg border border-slate-700' : 'text-neutral-500 hover:bg-neutral-800 hover:text-neutral-300'}`}
+            className={`flex items-center gap-4 px-4 py-4 rounded-2xl transition-all duration-300 group ${version === 'v1' ? 'bg-white/10 text-white shadow-2xl border border-white/10' : 'text-neutral-500 hover:bg-white/5 hover:text-neutral-300 border border-transparent'}`}
             title="V1: Sails"
           >
-            <Ship className={`w-5 h-5 ${version === 'v1' ? 'text-slate-400' : 'group-hover:text-neutral-400'}`} />
+            <Ship className={`w-5 h-5 transition-transform duration-500 ${version === 'v1' ? 'text-slate-400 scale-110' : 'group-hover:text-neutral-400'}`} />
             <div className="flex flex-col items-start leading-none hidden lg:flex">
-              <span className="font-semibold text-sm">V1: Sails</span>
-              <span className="text-[10px] opacity-50 mt-1">Prismatism</span>
+              <span className="font-bold text-sm">V1: Sails</span>
+              <span className="text-[10px] opacity-40 mt-1.5 font-mono">Generative Prismatism</span>
             </div>
           </button>
 
           <button
             onClick={(e) => { setVersion('v2'); handleGenerate('v2', e.shiftKey); }}
-            className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all group ${version === 'v2' ? 'bg-slate-800 text-white shadow-lg border border-slate-700' : 'text-neutral-500 hover:bg-neutral-800 hover:text-neutral-300'}`}
+            className={`flex items-center gap-4 px-4 py-4 rounded-2xl transition-all duration-300 group ${version === 'v2' ? 'bg-white/10 text-white shadow-2xl border border-white/10' : 'text-neutral-500 hover:bg-white/5 hover:text-neutral-300 border border-transparent'}`}
             title="V2: Figures"
           >
-            <Users className={`w-5 h-5 ${version === 'v2' ? 'text-slate-400' : 'group-hover:text-neutral-400'}`} />
+            <Users className={`w-5 h-5 transition-transform duration-500 ${version === 'v2' ? 'text-slate-400 scale-110' : 'group-hover:text-neutral-400'}`} />
             <div className="flex flex-col items-start leading-none hidden lg:flex">
-              <span className="font-semibold text-sm">V2: Figures</span>
-              <span className="text-[10px] opacity-50 mt-1">Intentional</span>
+              <span className="font-bold text-sm">V2: Figures</span>
+              <span className="text-[10px] opacity-40 mt-1.5 font-mono">Intentional Forms</span>
             </div>
           </button>
 
+          <div className="h-px bg-white/5 my-2 mx-3 hidden lg:block" />
+
           <button
             onClick={() => { setVersion('gemini3'); handleGenerate('gemini3'); }}
-            className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all group ${version === 'gemini3' ? 'bg-slate-800 text-white shadow-lg border border-slate-700' : 'text-neutral-500 hover:bg-neutral-800 hover:text-neutral-300'}`}
+            className={`flex items-center gap-4 px-4 py-4 rounded-2xl transition-all duration-300 group ${version === 'gemini3' ? 'bg-white/10 text-white shadow-2xl border border-white/10' : 'text-neutral-500 hover:bg-white/5 hover:text-neutral-300 border border-transparent'}`}
             title="Gemini 3.1 Pro"
           >
-            <Waves className={`w-5 h-5 ${version === 'gemini3' ? 'text-slate-400' : 'group-hover:text-neutral-400'}`} />
+            <Waves className={`w-5 h-5 transition-transform duration-500 ${version === 'gemini3' ? 'text-slate-400 scale-110' : 'group-hover:text-neutral-400'}`} />
             <div className="flex flex-col items-start leading-none hidden lg:flex">
-              <span className="font-semibold text-sm line-clamp-1">Gemini 3.1</span>
-              <span className="text-[10px] opacity-50 mt-1 uppercase">Reference</span>
+              <span className="font-bold text-sm line-clamp-1">Gemini 3.1</span>
+              <span className="text-[10px] opacity-40 mt-1.5 font-mono uppercase">Reference Art</span>
             </div>
           </button>
         </nav>
 
-        {/* Conditional Toggle */}
-        {showRenderToggle && (
-          <div className="w-full pt-6 border-t border-neutral-800 mt-auto">
-            <p className="text-[10px] uppercase tracking-widest text-neutral-500 font-bold px-3 mb-4 hidden lg:block">Renderer</p>
-            <div className="flex bg-neutral-950 p-1 rounded-xl border border-neutral-800 relative">
-               <div 
-                 className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-slate-700 rounded-lg transition-transform duration-200 ease-out ${renderMode === 'canvas' ? 'translate-x-full' : 'translate-x-0'}`}
-               />
-               <button 
-                 onClick={() => setRenderMode('svg')}
-                 className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs font-bold z-10 transition-colors ${renderMode === 'svg' ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
-               >
-                 <FileCode className="w-3.5 h-3.5" />
-                 <span className="hidden lg:block">SVG</span>
-               </button>
-               <button 
-                 onClick={() => setRenderMode('canvas')}
-                 className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs font-bold z-10 transition-colors ${renderMode === 'canvas' ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
-               >
-                 <Play className="w-3.5 h-3.5" />
-                 <span className="hidden lg:block">Canvas</span>
-               </button>
+        {/* Improved Toggle */}
+        <div className="w-full pt-6 border-t border-white/5 mt-auto pb-4">
+          {showRenderToggle ? (
+            <>
+              <p className="text-[10px] uppercase tracking-[0.2em] text-neutral-500 font-bold px-3 mb-4 hidden lg:block opacity-50 text-center">Engine</p>
+              <div className="flex bg-black/40 p-1.5 rounded-2xl border border-white/5 relative mx-1">
+                 <div 
+                   className={`absolute top-1.5 bottom-1.5 w-[calc(50%-6px)] bg-slate-700/80 rounded-xl transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] shadow-lg ${renderMode === 'canvas' ? 'translate-x-full' : 'translate-x-0'}`}
+                 />
+                 <button 
+                   onClick={() => setRenderMode('svg')}
+                   className={`flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-xs font-bold z-10 transition-colors ${renderMode === 'svg' ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
+                 >
+                   <FileCode className="w-4 h-4" />
+                   <span className="hidden lg:block text-[9px] uppercase tracking-wider mt-0.5">SVG</span>
+                 </button>
+                 <button 
+                   onClick={() => setRenderMode('canvas')}
+                   className={`flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-xs font-bold z-10 transition-colors ${renderMode === 'canvas' ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
+                 >
+                   <Play className="w-4 h-4" />
+                   <span className="hidden lg:block text-[9px] uppercase tracking-wider mt-0.5">Canvas</span>
+                 </button>
+              </div>
+            </>
+          ) : (
+            <div className="px-4 py-6 text-center">
+              <span className="text-[10px] uppercase tracking-[0.2em] text-neutral-600 font-bold block mb-2 opacity-50">Locked Engine</span>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-full border border-white/5 text-[10px] font-mono text-neutral-400">
+                <FileCode className="w-3 h-3" /> STATIC SVG
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col relative overflow-y-auto">
-        <header className="flex items-center justify-between p-6 border-b border-neutral-900 bg-neutral-950/50 backdrop-blur-md sticky top-0 z-20">
+      <main className="flex-1 flex flex-col relative overflow-y-auto bg-[radial-gradient(circle_at_50%_0%,rgba(30,41,59,0.15),transparent)]">
+        <header className="flex items-center justify-between px-10 py-8 border-b border-white/5 bg-neutral-950/20 backdrop-blur-md sticky top-0 z-20">
           <div>
-            <h1 className="text-xl font-bold tracking-tight">Prismatism</h1>
-            <p className="text-xs text-neutral-500 font-mono">
-              {currentData?.version === 'v1' ? 'LYONEL FEININGER STYLE - V1' : currentData?.version === 'v2' ? 'LYONEL FEININGER STYLE - V2' : 'GEMINI 3.1 REFERENCE'}
-            </p>
+            <h1 className="text-2xl font-black tracking-tighter text-white uppercase italic">
+              {currentData?.version === 'v1' ? 'Prismatic Sails' : currentData?.version === 'v2' ? 'The Watchers' : 'Gemini Reference'}
+            </h1>
+            <div className="flex items-center gap-3 mt-1.5">
+               <span className="px-2 py-0.5 bg-slate-900 border border-slate-700 text-[10px] font-mono text-slate-400 rounded uppercase tracking-tighter">
+                  Edition {currentData?.seed || '000'}
+               </span>
+               <span className="text-[10px] text-neutral-500 font-mono uppercase tracking-widest opacity-60">
+                  {currentData?.version || 'N/A'}
+               </span>
+            </div>
           </div>
 
-          <div className="flex gap-2">
-            <div className="flex bg-neutral-900 rounded-lg p-1 border border-neutral-800 mr-4">
+          <div className="flex items-center gap-6">
+            <div className="flex bg-black/40 rounded-xl p-1.5 border border-white/5">
                <button 
                  onClick={handlePrevious} 
                  disabled={currentIndex <= 0}
-                 className="p-2 hover:bg-neutral-800 disabled:opacity-20 rounded-md transition text-neutral-400"
+                 className="p-2.5 hover:bg-white/5 disabled:opacity-10 rounded-lg transition-all text-neutral-400 active:scale-90"
                >
                  <ChevronLeft className="w-5 h-5" />
                </button>
-               <div className="px-3 flex items-center text-xs font-mono text-neutral-500 tabular-nums">
-                 {currentIndex + 1} / {history.length}
+               <div className="px-4 flex items-center text-xs font-mono font-bold text-neutral-400 tabular-nums">
+                 {currentIndex + 1} <span className="mx-2 opacity-20">/</span> {history.length}
                </div>
                <button 
                  onClick={handleNext} 
                  disabled={currentIndex >= history.length - 1}
-                 className="p-2 hover:bg-neutral-800 disabled:opacity-20 rounded-md transition text-neutral-400"
+                 className="p-2.5 hover:bg-white/5 disabled:opacity-10 rounded-lg transition-all text-neutral-400 active:scale-90"
                >
                  <ChevronRight className="w-5 h-5" />
                </button>
@@ -164,10 +185,10 @@ export default function Home() {
 
             <button 
                onClick={(e) => handleGenerate(version, e.shiftKey)} 
-               className="flex items-center gap-2 px-5 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg font-bold transition text-white shadow-lg shadow-slate-900/50 border border-slate-600 active:scale-95"
+               className="flex items-center gap-3 px-8 py-3.5 bg-white text-black hover:bg-neutral-200 rounded-2xl font-black transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] active:scale-95 uppercase tracking-tighter text-sm"
             >
                <RefreshCw className="w-4 h-4" />
-               Generate
+               Re-Imagine
             </button>
           </div>
         </header>
