@@ -110,37 +110,28 @@ export default function Home() {
         </nav>
 
         {/* Improved Toggle */}
-        <div className="w-full pt-6 border-t border-white/5 mt-auto pb-4">
-          {showRenderToggle ? (
+        <div className="w-full pt-6 border-t border-white/5 mt-auto pb-4 px-1">
+          {showRenderToggle && (
             <>
-              <p className="text-[10px] uppercase tracking-[0.2em] text-neutral-500 font-bold px-3 mb-4 hidden lg:block opacity-50 text-center">Engine</p>
-              <div className="flex bg-black/40 p-1.5 rounded-2xl border border-white/5 relative mx-1">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-neutral-500 font-bold px-3 mb-4 hidden lg:block opacity-50 text-center uppercase tracking-widest">Engine</p>
+              <div className="flex bg-black/40 p-1 rounded-xl border border-white/5 relative h-9">
                  <div 
-                   className={`absolute top-1.5 bottom-1.5 w-[calc(50%-6px)] bg-slate-700/80 rounded-xl transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] shadow-lg ${renderMode === 'canvas' ? 'translate-x-full' : 'translate-x-0'}`}
+                   className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-slate-700/80 rounded-lg transition-all duration-300 shadow-lg ${renderMode === 'canvas' ? 'translate-x-full' : 'translate-x-0'}`}
                  />
                  <button 
                    onClick={() => setRenderMode('svg')}
-                   className={`flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-xs font-bold z-10 transition-colors ${renderMode === 'svg' ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
+                   className={`flex-1 flex items-center justify-center text-[10px] font-bold z-10 transition-colors tracking-widest ${renderMode === 'svg' ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
                  >
-                   <FileCode className="w-4 h-4" />
-                   <span className="hidden lg:block text-[9px] uppercase tracking-wider mt-0.5">SVG</span>
+                   SVG
                  </button>
                  <button 
                    onClick={() => setRenderMode('canvas')}
-                   className={`flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-xs font-bold z-10 transition-colors ${renderMode === 'canvas' ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
+                   className={`flex-1 flex items-center justify-center text-[10px] font-bold z-10 transition-colors tracking-widest ${renderMode === 'canvas' ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
                  >
-                   <Play className="w-4 h-4" />
-                   <span className="hidden lg:block text-[9px] uppercase tracking-wider mt-0.5">Canvas</span>
+                   CANVAS
                  </button>
               </div>
             </>
-          ) : (
-            <div className="px-4 py-6 text-center">
-              <span className="text-[10px] uppercase tracking-[0.2em] text-neutral-600 font-bold block mb-2 opacity-50">Locked Engine</span>
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-full border border-white/5 text-[10px] font-mono text-neutral-400">
-                <FileCode className="w-3 h-3" /> STATIC SVG
-              </div>
-            </div>
           )}
         </div>
       </aside>
