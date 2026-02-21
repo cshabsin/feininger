@@ -27,7 +27,14 @@ export default function VersionClient({ version }: { version: Version }) {
       newData = generateFeiningerV2(dimensions.width, dimensions.height, overrideForceWaldo);
     }
     
-    const newHistory = [...history.slice(0, currentIndex + 1), newData];
+    // If the last item in history has a different version, it means we navigated.
+    // Reset the history for the new version.
+    const lastVersion = history.length > 0 ? history[history.length - 1].version : null;
+    const isNewVersion = lastVersion !== targetVersion;
+
+    const baseHistory = isNewVersion ? [] : history.slice(0, currentIndex + 1);
+    
+    const newHistory = [...baseHistory, newData];
     setHistory(newHistory);
     setCurrentIndex(newHistory.length - 1);
   };
