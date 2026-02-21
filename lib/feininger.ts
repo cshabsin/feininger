@@ -25,7 +25,7 @@ export interface FeiningerData {
   height: number;
   shapes: Shape[];
   horizonY: number;
-  version: 'v1' | 'v2' | 'gemini3';
+  version: 'v1' | 'v2' | 'v3' | 'gemini3';
   regions?: Region[];
   seed: number;
 }
@@ -956,7 +956,7 @@ function generateBoatShapes(idPrefix: string, x: number, y: number, scale: numbe
   return shapes;
 }
 
-export function generateFeiningerGemini3(width: number, height: number): FeiningerData {
+export function generateFeiningerV3(width: number, height: number): FeiningerData {
   const shapes: Shape[] = [];
   const horizonY = 900; // Fixed for this style's coordinates
   const seed = randomInt(1, 1000);
@@ -1033,7 +1033,19 @@ export function generateFeiningerGemini3(width: number, height: number): Feining
     });
   }
 
-  return { width: 800, height: 1200, shapes, horizonY, version: 'gemini3', seed };
+  return { width: 800, height: 1200, shapes, horizonY, version: 'v3', seed };
 }
+
+export function generateFeiningerGemini3(width: number, height: number): FeiningerData {
+  return {
+    width: 800,
+    height: 1200,
+    shapes: [],
+    horizonY: 900,
+    version: 'gemini3',
+    seed: 0
+  };
+}
+
 
   

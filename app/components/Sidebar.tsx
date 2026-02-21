@@ -49,6 +49,18 @@ export const Sidebar = () => {
         </Link>
 
         <Link
+          href="/v3"
+          className={`flex items-center gap-4 px-4 py-4 rounded-2xl transition-all duration-300 group ${isActive('/v3') ? 'bg-white/10 text-white shadow-2xl border border-white/10' : 'text-neutral-500 hover:bg-white/5 hover:text-neutral-300 border border-transparent'}`}
+          title="V3: Calm Day N+1"
+        >
+          <Ship className={`w-5 h-5 transition-transform duration-500 ${isActive('/v3') ? 'text-slate-400 scale-110' : 'group-hover:text-neutral-400'}`} />
+          <div className="flex flex-col items-start leading-none hidden lg:flex">
+            <span className="font-bold text-sm">V3: Calm Day N+1</span>
+            <span className="text-[10px] opacity-40 mt-1.5 font-mono uppercase">Generative Sea</span>
+          </div>
+        </Link>
+
+        <Link
           href="/gemini3"
           className={`flex items-center gap-4 px-4 py-4 rounded-2xl transition-all duration-300 group ${isActive('/gemini3') ? 'bg-white/10 text-white shadow-2xl border border-white/10' : 'text-neutral-500 hover:bg-white/5 hover:text-neutral-300 border border-transparent'}`}
           title="Calm Day at Sea III"

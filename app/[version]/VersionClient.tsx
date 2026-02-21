@@ -1,15 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { generateFeiningerV1, generateFeiningerV2, generateFeiningerGemini3, FeiningerData } from "../../lib/feininger";
+import { generateFeiningerV1, generateFeiningerV2, generateFeiningerV3, generateFeiningerGemini3, FeiningerData } from "../../lib/feininger";
 import { FeiningerSVG } from "../components/FeiningerSVG";
 import { FeiningerCanvas } from "../components/FeiningerCanvas";
 import { FeiningerGemini3 } from "../components/FeiningerGemini3";
 import { FeiningerGemini3Canvas } from "../components/FeiningerGemini3Canvas";
+import { FeiningerV3 } from "../components/FeiningerV3";
+import { FeiningerV3Canvas } from "../components/FeiningerV3Canvas";
 import { useHistory } from "../context/HistoryContext";
 import { RefreshCw, Box, FileCode, Play } from "lucide-react";
 
-type Version = 'v1' | 'v2' | 'gemini3';
+type Version = 'v1' | 'v2' | 'v3' | 'gemini3';
 type RenderMode = 'svg' | 'canvas';
 
 // Helper to generate new data
@@ -19,6 +21,8 @@ const getNewData = (version: Version, dimensions: {width: number, height: number
       return generateFeiningerV1(dimensions.width, dimensions.height);
     case 'gemini3':
       return generateFeiningerGemini3(dimensions.width, dimensions.height);
+    case 'v3':
+      return generateFeiningerV3(dimensions.width, dimensions.height);
     case 'v2':
     default:
       return generateFeiningerV2(dimensions.width, dimensions.height, override);
@@ -49,7 +53,7 @@ export default function VersionClient({ version }: { version: Version }) {
       <header className="flex items-center justify-between px-10 py-8 border-b border-white/5 bg-neutral-950/20 backdrop-blur-md sticky top-0 z-20">
         <div>
           <h1 className="text-2xl font-black tracking-tighter text-white uppercase italic">
-            {currentData?.version === 'v1' ? 'Prismatic Sails' : currentData?.version === 'v2' ? 'The Watchers' : 'Calm Day at Sea III'}
+            {currentData?.version === 'v1' ? 'Prismatic Sails' : currentData?.version === 'v2' ? 'The Watchers' : currentData?.version === 'v3' ? 'Calm Day at Sea N+1' : 'Calm Day at Sea III'}
           </h1>
           <div className="flex items-center gap-3 mt-1.5">
              <span className="px-2 py-0.5 bg-slate-900 border border-slate-700 text-[10px] font-mono text-slate-400 rounded uppercase tracking-tighter">
@@ -100,7 +104,9 @@ export default function VersionClient({ version }: { version: Version }) {
             {currentData ? (
               <>
                 {currentData.version === 'gemini3' ? (
-                  renderMode === 'svg' ? <FeiningerGemini3 data={currentData} /> : <FeiningerGemini3Canvas data={currentData} />
+                  renderMode === 'svg' ? <FeiningerGemini3 /> : <FeiningerGemini3Canvas />
+                ) : currentData.version === 'v3' ? (
+                  renderMode === 'svg' ? <FeiningerV3 data={currentData} /> : <FeiningerV3Canvas data={currentData} />
                 ) : renderMode === 'svg' ? (
                    <FeiningerSVG data={currentData} />
                 ) : (
@@ -119,7 +125,7 @@ export default function VersionClient({ version }: { version: Version }) {
       <footer className="p-8 border-t border-white/5 flex justify-center gap-12 text-neutral-500">
          <div className="flex flex-col items-center">
            <span className="text-[10px] uppercase tracking-tighter mb-1">Architecture</span>
-           <span className="text-sm font-semibold text-neutral-300 uppercase">{currentData?.version === 'gemini3' ? 'Calm Day at Sea III' : (currentData?.version || '-')}</span>
+           <span className="text-sm font-semibold text-neutral-300 uppercase">{currentData?.version === 'gemini3' ? 'Calm Day at Sea III' : currentData?.version === 'v3' ? 'Calm Day at Sea N+1' : (currentData?.version || '-')}</span>
          </div>
          <div className="flex flex-col items-center">
            <span className="text-[10px] uppercase tracking-tighter mb-1">Renderer</span>

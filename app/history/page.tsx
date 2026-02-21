@@ -3,6 +3,7 @@
 import { useHistory } from "../context/HistoryContext";
 import { FeiningerSVG } from "../components/FeiningerSVG";
 import { FeiningerGemini3 } from "../components/FeiningerGemini3";
+import { FeiningerV3 } from "../components/FeiningerV3";
 import { Image } from "lucide-react";
 
 export default function HistoryPage() {
@@ -35,7 +36,9 @@ export default function HistoryPage() {
               <div key={`${item.version}-${item.seed}-${index}`} className="border border-white/5 rounded-2xl p-4 bg-black/40 backdrop-blur-sm flex flex-col gap-4 group hover:border-white/10 transition-all duration-500 hover:shadow-2xl">
                 <div className="overflow-hidden rounded-xl border border-white/5 shadow-inner bg-white ring-1 ring-white/5">
                    {item.version === 'gemini3' ? (
-                      <FeiningerGemini3 data={item} />
+                      <FeiningerGemini3 />
+                    ) : item.version === 'v3' ? (
+                      <FeiningerV3 data={item} />
                     ) : (
                       <FeiningerSVG data={item} />
                     )
@@ -44,7 +47,7 @@ export default function HistoryPage() {
                 <div className="flex justify-between items-center px-1">
                    <div className="flex flex-col">
                      <span className="text-[10px] font-mono text-slate-500 uppercase tracking-tighter mb-0.5">
-                       {item.version === 'gemini3' ? 'Calm Day at Sea III' : item.version}
+                       {item.version === 'gemini3' ? 'Calm Day at Sea III' : item.version === 'v3' ? 'Calm Day at Sea N+1' : item.version}
                      </span>
                      <span className="text-xs font-bold text-neutral-300 uppercase tracking-tight">
                        Edition {item.seed}

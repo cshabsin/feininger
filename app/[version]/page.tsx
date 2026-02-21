@@ -1,11 +1,12 @@
 import VersionClient from './VersionClient';
 
-type Version = 'v1' | 'v2' | 'gemini3';
+type Version = 'v1' | 'v2' | 'v3' | 'gemini3';
 
 export async function generateStaticParams() {
   return [
     { version: 'v1' },
     { version: 'v2' },
+    { version: 'v3' },
     { version: 'gemini3' },
   ]
 }
