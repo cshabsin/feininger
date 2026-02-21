@@ -96,7 +96,8 @@ export const FeiningerGemini3: React.FC = () => {
 
       {/* ================= BACKGROUND BOAT ================= */}
       <g id="distant-boat">
-        <animateTransform attributeName="transform" type="translate" values="0,0; 400,0; -500,0; 0,0" keyTimes="0; 0.444; 0.445; 1" dur="150s" repeatCount="indefinite" additive="sum" />
+        <animateTransform attributeName="transform" type="translate" values="0,0; 500,0; -600,0; 0,0" keyTimes="0; 0.444; 0.445; 1" dur="150s" repeatCount="indefinite" additive="sum" />
+        <animate attributeName="opacity" values="1;1;0;0;1;1" keyTimes="0; 0.443; 0.444; 0.445; 0.446; 1" dur="150s" repeatCount="indefinite" />
         <animateTransform attributeName="transform" type="translate" values="0,0; 0,8; 0,0" dur="5s" repeatCount="indefinite" additive="sum" />
         <polygon points="430,800 440,900 425,898" fill="#e8ebed" opacity="0.85" />
         <polygon points="440,800 455,901 440,900" fill="#a4b2ba" opacity="0.8" />
@@ -106,7 +107,8 @@ export const FeiningerGemini3: React.FC = () => {
 
       {/* ================= LEFT BOAT (COOL / WHITE) ================= */}
       <g id="left-boat">
-        <animateTransform attributeName="transform" type="translate" values="0,0; 600,0; -400,0; 0,0" keyTimes="0; 0.6; 0.601; 1" dur="70s" repeatCount="indefinite" additive="sum" />
+        <animateTransform attributeName="transform" type="translate" values="0,0; 800,0; -600,0; 0,0" keyTimes="0; 0.6; 0.601; 1" dur="70s" repeatCount="indefinite" additive="sum" />
+        <animate attributeName="opacity" values="1;1;0;0;1;1" keyTimes="0; 0.599; 0.6; 0.601; 0.602; 1" dur="70s" repeatCount="indefinite" />
         <animateTransform attributeName="transform" type="translate" values="0,0; 0,15; 0,0" dur="7s" repeatCount="indefinite" additive="sum" />
         {/* Sails */}
         <polygon points="120,890 230,300 250,895" fill="url(#sail-white-main)" />
@@ -130,7 +132,8 @@ export const FeiningerGemini3: React.FC = () => {
 
       {/* ================= RIGHT BOATS (WARM / DARK / RED) ================= */}
       <g id="right-boat">
-        <animateTransform attributeName="transform" type="translate" values="0,0; -900,0; 400,0; 0,0" keyTimes="0; 0.692; 0.693; 1" dur="90s" repeatCount="indefinite" additive="sum" />
+        <animateTransform attributeName="transform" type="translate" values="0,0; -1000,0; 500,0; 0,0" keyTimes="0; 0.692; 0.693; 1" dur="90s" repeatCount="indefinite" additive="sum" />
+        <animate attributeName="opacity" values="1;1;0;0;1;1" keyTimes="0; 0.691; 0.692; 0.693; 0.694; 1" dur="90s" repeatCount="indefinite" />
         <animateTransform attributeName="transform" type="translate" values="0,0; 0,20; 0,0" dur="9s" repeatCount="indefinite" additive="sum" />
         {/* Back Dark Sail */}
         <polygon points="540,900 480,150 650,910" fill="url(#sail-plum)" />
