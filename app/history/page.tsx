@@ -44,7 +44,7 @@ export default function HistoryPage() {
                 <div className="flex justify-between items-center px-1">
                    <div className="flex flex-col">
                      <span className="text-[10px] font-mono text-slate-500 uppercase tracking-tighter mb-0.5">
-                       {item.version}
+                       {item.version === 'gemini3' ? 'Calm Day at Sea III' : item.version}
                      </span>
                      <span className="text-xs font-bold text-neutral-300 uppercase tracking-tight">
                        Edition {item.seed}

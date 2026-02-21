@@ -48,7 +48,7 @@ export default function VersionClient({ version }: { version: Version }) {
       <header className="flex items-center justify-between px-10 py-8 border-b border-white/5 bg-neutral-950/20 backdrop-blur-md sticky top-0 z-20">
         <div>
           <h1 className="text-2xl font-black tracking-tighter text-white uppercase italic">
-            {currentData?.version === 'v1' ? 'Prismatic Sails' : currentData?.version === 'v2' ? 'The Watchers' : 'Gemini Reference'}
+            {currentData?.version === 'v1' ? 'Prismatic Sails' : currentData?.version === 'v2' ? 'The Watchers' : 'Calm Day at Sea III'}
           </h1>
           <div className="flex items-center gap-3 mt-1.5">
              <span className="px-2 py-0.5 bg-slate-900 border border-slate-700 text-[10px] font-mono text-slate-400 rounded uppercase tracking-tighter">
@@ -118,7 +118,7 @@ export default function VersionClient({ version }: { version: Version }) {
       <footer className="p-8 border-t border-white/5 flex justify-center gap-12 text-neutral-500">
          <div className="flex flex-col items-center">
            <span className="text-[10px] uppercase tracking-tighter mb-1">Architecture</span>
-           <span className="text-sm font-semibold text-neutral-300 uppercase">{currentData?.version || '-'}</span>
+           <span className="text-sm font-semibold text-neutral-300 uppercase">{currentData?.version === 'gemini3' ? 'Calm Day at Sea III' : (currentData?.version || '-')}</span>
          </div>
          <div className="flex flex-col items-center">
            <span className="text-[10px] uppercase tracking-tighter mb-1">Renderer</span>

@@ -51,12 +51,12 @@ export const Sidebar = () => {
         <Link
           href="/gemini3"
           className={`flex items-center gap-4 px-4 py-4 rounded-2xl transition-all duration-300 group ${isActive('/gemini3') ? 'bg-white/10 text-white shadow-2xl border border-white/10' : 'text-neutral-500 hover:bg-white/5 hover:text-neutral-300 border border-transparent'}`}
-          title="Gemini 3.1 Pro"
+          title="Calm Day at Sea III"
         >
           <Waves className={`w-5 h-5 transition-transform duration-500 ${isActive('/gemini3') ? 'text-slate-400 scale-110' : 'group-hover:text-neutral-400'}`} />
           <div className="flex flex-col items-start leading-none hidden lg:flex">
-            <span className="font-bold text-sm line-clamp-1">Gemini 3.1</span>
-            <span className="text-[10px] opacity-40 mt-1.5 font-mono uppercase">Reference Art</span>
+            <span className="font-bold text-sm line-clamp-1">Calm Day at Sea III</span>
+            <span className="text-[10px] opacity-40 mt-1.5 font-mono uppercase">Gemini 3.1 Reference</span>
           </div>
         </Link>
 
