@@ -11,5 +11,5 @@ export async function generateStaticParams() {
 }
 
 export default function VersionPage({ params }: { params: { version: Version } }) {
-  return <VersionClient version={params.version} />;
+  return <VersionClient key={params.version} version={params.version} />;
 }
