@@ -2,7 +2,14 @@ import React from 'react';
 
 export const FeiningerGemini3: React.FC = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1200" width="400" height="600" className="max-w-full h-auto max-h-[70vh]">
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      viewBox="0 0 800 1200" 
+      width="100%" 
+      height="100%" 
+      className="max-w-full h-auto max-h-[85vh]"
+      style={{ backgroundColor: '#111827' }}
+    >
       <defs>
         {/* Background Gradients */}
         <linearGradient id="sky-blue" x1="0%" y1="0%" x2="50%" y2="100%">
