@@ -11,39 +11,39 @@ import { Ship, Users, Waves, Box, FileCode, Play, ChevronLeft, ChevronRight, Ref
 type Version = 'v1' | 'v2' | 'gemini3';
 type RenderMode = 'svg' | 'canvas';
 
+// Helper to generate the first piece of data for a version
+const getInitialData = (version: Version, dimensions: {width: number, height: number}): FeiningerData => {
+  switch (version) {
+    case 'v1':
+      return generateFeiningerV1(dimensions.width, dimensions.height);
+    case 'gemini3':
+      return generateFeiningerGemini3(dimensions.width, dimensions.height);
+    case 'v2':
+    default:
+      return generateFeiningerV2(dimensions.width, dimensions.height);
+  }
+}
+
 export default function VersionClient({ version }: { version: Version }) {
-  const [history, setHistory] = useState<FeiningerData[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(-1);
-  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
   const [dimensions] = useState({ width: 800, height: 600 });
+  
+  // By initializing state with a function, we ensure it's derived correctly
+  // on the first render after the component re-mounts (due to the key change).
+  const [history, setHistory] = useState<FeiningerData[]>(() => [getInitialData(version, dimensions)]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  
+  // The render mode is also derived from the version prop.
+  const [renderMode, setRenderMode] = useState<RenderMode>(() => version === 'gemini3' ? 'svg' : 'canvas');
 
   const handleGenerate = (targetVersion: Version = version, overrideForceWaldo: boolean = false) => {
-    let newData: FeiningerData;
-    if (targetVersion === 'v1') {
-      newData = generateFeiningerV1(dimensions.width, dimensions.height);
-    } else if (targetVersion === 'gemini3') {
-      newData = generateFeiningerGemini3(dimensions.width, dimensions.height);
-    } else {
-      newData = generateFeiningerV2(dimensions.width, dimensions.height, overrideForceWaldo);
-    }
+    const newData = getInitialData(targetVersion, dimensions);
     
-    // If the last item in history has a different version, it means we navigated.
-    // Reset the history for the new version.
-    const lastVersion = history.length > 0 ? history[history.length - 1].version : null;
-    const isNewVersion = lastVersion !== targetVersion;
-
-    const baseHistory = isNewVersion ? [] : history.slice(0, currentIndex + 1);
-    
-    const newHistory = [...baseHistory, newData];
+    // When generating a new image, we append to the history of the current version.
+    // The slice correctly truncates any "future" history if we've gone back.
+    const newHistory = [...history.slice(0, currentIndex + 1), newData];
     setHistory(newHistory);
     setCurrentIndex(newHistory.length - 1);
   };
-
-  // Initial generation on version change
-  useEffect(() => {
-    handleGenerate(version);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [version]);
 
   const handlePrevious = () => {
     if (currentIndex > 0) {
