@@ -125,19 +125,19 @@ export default function VersionClient({ version }: { version: Version }) {
         </div>
       </div>
 
-      <footer className="p-12 flex justify-center gap-16 text-neutral-500 bg-transparent">
-         <div className="flex flex-col items-center">
-           <span className="text-[10px] tracking-widest mb-2 opacity-30 font-bold text-white uppercase">Architecture</span>
+      <footer className="p-16 flex justify-center gap-24 text-neutral-500 bg-transparent">
+         <div className="flex flex-col items-center gap-3">
+           <span className="text-[10px] tracking-[0.4em] opacity-30 font-bold text-white uppercase">Architecture</span>
            <span className="text-xs font-bold text-neutral-400 tracking-tight">{currentData?.version === 'calm-day-at-sea-iii' ? 'Calm Day at Sea III' : currentData?.version === 'calm-day-n-plus-1' ? 'Calm Day at Sea N+1' : currentData?.version === 'prismatic-sails' ? 'Prismatic Sails' : currentData?.version === 'the-watchers' ? 'The Watchers' : (currentData?.version || '-')}</span>
          </div>
-         <div className="flex flex-col items-center">
-           <span className="text-[10px] tracking-widest mb-2 opacity-30 font-bold text-white uppercase">Renderer</span>
+         <div className="flex flex-col items-center gap-3">
+           <span className="text-[10px] tracking-[0.4em] opacity-30 font-bold text-white uppercase">Renderer</span>
            <span className="text-xs font-bold text-neutral-400 tracking-tight">
              {renderMode === 'svg' ? 'SVG' : 'Canvas'}
            </span>
          </div>
-         <div className="flex flex-col items-center">
-           <span className="text-[10px] tracking-widest mb-2 opacity-30 font-bold text-white uppercase">Resolution</span>
+         <div className="flex flex-col items-center gap-3">
+           <span className="text-[10px] tracking-[0.4em] opacity-30 font-bold text-white uppercase">Resolution</span>
            <span className="text-xs font-bold text-neutral-400 tracking-tight">800 &times; 1200</span>
          </div>
       </footer>
