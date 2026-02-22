@@ -103,6 +103,11 @@ export const FeiningerV3Canvas: React.FC<FeiningerV3CanvasProps> = ({ data }) =>
       const rightBoatY = interpolate([0, 20, 0], [0, 0.5, 1], (time % 9000) / 9000);
       const rightBoatOpacity = interpolate([1, 1, 0, 0, 1, 1], [0, 0.691, 0.692, 0.693, 0.694, 1], rightBoatProgress);
 
+      const fgBoatProgress = (time % 110000) / 110000;
+      const fgBoatX = interpolate([0, 1200, -800, 0], [0, 0.6, 0.601, 1], fgBoatProgress);
+      const fgBoatY = interpolate([0, 30, 0], [0, 0.5, 1], (time % 12000) / 12000);
+      const fgBoatOpacity = interpolate([1, 1, 0, 0, 1, 1], [0, 0.599, 0.6, 0.601, 0.602, 1], fgBoatProgress);
+
       // DISTANT BOAT
       ctx.save();
       ctx.translate(distantBoatX, distantBoatY);
@@ -126,6 +131,16 @@ export const FeiningerV3Canvas: React.FC<FeiningerV3CanvasProps> = ({ data }) =>
         drawPolygon(shape.points, shape.fill, shape.opacity * rightBoatOpacity, shape.blendMode as any);
       });
       ctx.restore();
+
+      // FOREGROUND BOAT
+      if (getBoatShapes('foreground-boat').length > 0) {
+        ctx.save();
+        ctx.translate(fgBoatX, fgBoatY);
+        getBoatShapes('foreground-boat').forEach(shape => {
+          drawPolygon(shape.points, shape.fill, shape.opacity * fgBoatOpacity, shape.blendMode as any);
+        });
+        ctx.restore();
+      }
 
       // 3. NOISE OVERLAY
       if (noisePattern) {

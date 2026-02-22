@@ -1050,6 +1050,11 @@ export function generateFeiningerV3(width: number, height: number): FeiningerDat
   shapes.push(...generateBoatShapes('left-boat', 230, 900, 0.8, horizonY));
   shapes.push(...generateBoatShapes('right-boat', 650, 910, 1.1, horizonY));
 
+  // Occasionally add a very close-up foreground boat
+  if (Math.random() < 0.2) {
+    shapes.push(...generateBoatShapes('foreground-boat', randomRange(100, 700), 950, 1.8, horizonY));
+  }
+
   // Prismatic Rays
   for (let i = 0; i < 4; i++) {
     shapes.push({

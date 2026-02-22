@@ -84,23 +84,40 @@ export const FeiningerV3: React.FC<FeiningerV3Props> = ({ data }) => {
         ))}
       </g>
 
-      {/* 4. RIGHT BOAT */}
-      <g id="right-boat">
-        <animateTransform attributeName="transform" type="translate" values="0,0; -1000,0; 500,0; 0,0" keyTimes="0; 0.692; 0.693; 1" dur="90s" repeatCount="indefinite" additive="sum" />
-        <animate attributeName="opacity" values="1;1;0;0;1;1" keyTimes="0; 0.691; 0.692; 0.693; 0.694; 1" dur="90s" repeatCount="indefinite" />
-        <animateTransform attributeName="transform" type="translate" values="0,0; 0,20; 0,0" dur="9s" repeatCount="indefinite" additive="sum" />
-        {getShapes('right-boat').map(shape => (
-          <polygon 
-            key={shape.id}
-            points={shape.points.map(p => `${p.x},${p.y}`).join(' ')}
-            fill={shape.fill}
-            opacity={shape.opacity}
-            style={{ mixBlendMode: shape.blendMode as any }}
-          />
-        ))}
-      </g>
-
-      <rect width="100%" height="100%" filter="url(#noise)" style={{mixBlendMode: 'multiply', pointerEvents: 'none'}} />
+            {/* 4. RIGHT BOAT */}
+            <g id="right-boat">
+              <animateTransform attributeName="transform" type="translate" values="0,0; -1000,0; 500,0; 0,0" keyTimes="0; 0.692; 0.693; 1" dur="90s" repeatCount="indefinite" additive="sum" />
+              <animate attributeName="opacity" values="1;1;0;0;1;1" keyTimes="0; 0.691; 0.692; 0.693; 0.694; 1" dur="90s" repeatCount="indefinite" />
+              <animateTransform attributeName="transform" type="translate" values="0,0; 0,20; 0,0" dur="9s" repeatCount="indefinite" additive="sum" />
+              {getShapes('right-boat').map(shape => (
+                <polygon 
+                  key={shape.id}
+                  points={shape.points.map(p => `${p.x},${p.y}`).join(' ')}
+                  fill={shape.fill}
+                  opacity={shape.opacity}
+                  style={{ mixBlendMode: shape.blendMode as any }}
+                />
+              ))}
+            </g>
+      
+            {/* 5. FOREGROUND BOAT (Occasionally generated) */}
+            {getShapes('foreground-boat').length > 0 && (
+              <g id="foreground-boat">
+                <animateTransform attributeName="transform" type="translate" values="0,0; 1200,0; -800,0; 0,0" keyTimes="0; 0.6; 0.601; 1" dur="110s" repeatCount="indefinite" additive="sum" />
+                <animate attributeName="opacity" values="1;1;0;0;1;1" keyTimes="0; 0.599; 0.6; 0.601; 0.602; 1" dur="110s" repeatCount="indefinite" />
+                <animateTransform attributeName="transform" type="translate" values="0,0; 0,30; 0,0" dur="12s" repeatCount="indefinite" additive="sum" />
+                {getShapes('foreground-boat').map(shape => (
+                  <polygon 
+                    key={shape.id}
+                    points={shape.points.map(p => `${p.x},${p.y}`).join(' ')}
+                    fill={shape.fill}
+                    opacity={shape.opacity}
+                    style={{ mixBlendMode: shape.blendMode as any }}
+                  />
+                ))}
+              </g>
+            )}
+            <rect width="100%" height="100%" filter="url(#noise)" style={{mixBlendMode: 'multiply', pointerEvents: 'none'}} />
     </svg>
   );
 };
