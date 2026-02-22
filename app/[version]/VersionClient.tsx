@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { generateFeiningerV1, generateFeiningerV2, generateFeiningerV3, generateFeiningerGemini2, generateFeiningerGemini3, FeiningerData } from "../../lib/feininger";
+import { useSearchParams, useRouter } from 'next/navigation';
+import LZString from 'lz-string';
+import { generateFeiningerV1, generateFeiningerV2, generateFeiningerV3, generateFeiningerGemini2, generateFeiningerGemini3, FeiningerData, V3Config } from "../../lib/feininger";
 import { FeiningerSVG } from "../components/FeiningerSVG";
 import { FeiningerCanvas } from "../components/FeiningerCanvas";
 import { FeiningerGemini2 } from "../components/FeiningerGemini2";
@@ -10,13 +12,13 @@ import { FeiningerGemini3Canvas } from "../components/FeiningerGemini3Canvas";
 import { FeiningerV3 } from "../components/FeiningerV3";
 import { FeiningerV3Canvas } from "../components/FeiningerV3Canvas";
 import { useHistory } from "../context/HistoryContext";
-import { RefreshCw, Box, FileCode, Play } from "lucide-react";
+import { RefreshCw, Box, FileCode, Play, Share2, Check } from "lucide-react";
 
 type Version = 'prismatic-sails' | 'the-watchers' | 'calm-day-n-plus-1' | 'calm-day-at-sea-ii' | 'calm-day-at-sea-iii';
 type RenderMode = 'svg' | 'canvas';
 
 // Helper to generate new data
-const getNewData = (version: Version, dimensions: {width: number, height: number}, override: boolean): FeiningerData => {
+const getNewData = (version: Version, dimensions: {width: number, height: number}, override: boolean, existingConfig?: V3Config): FeiningerData => {
   switch (version) {
     case 'prismatic-sails':
       return generateFeiningerV1(dimensions.width, dimensions.height);
@@ -25,7 +27,7 @@ const getNewData = (version: Version, dimensions: {width: number, height: number
     case 'calm-day-at-sea-iii':
       return generateFeiningerGemini3(dimensions.width, dimensions.height);
     case 'calm-day-n-plus-1':
-      return generateFeiningerV3(dimensions.width, dimensions.height);
+      return generateFeiningerV3(dimensions.width, dimensions.height, existingConfig);
     case 'the-watchers':
     default:
       return generateFeiningerV2(dimensions.width, dimensions.height, override);
@@ -33,32 +35,64 @@ const getNewData = (version: Version, dimensions: {width: number, height: number
 }
 
 export default function VersionClient({ version }: { version: Version }) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [dimensions] = useState({ width: 800, height: 600 });
   const [currentData, setCurrentData] = useState<FeiningerData | null>(null);
   const { addToHistory } = useHistory();
   const [renderMode, setRenderMode] = useState<RenderMode>(() => (version === 'calm-day-at-sea-iii' || version === 'calm-day-at-sea-ii') ? 'svg' : 'canvas');
   const [isRendering, setIsRendering] = useState(false);
+  const [showCopyFeedback, setShowCopyFeedback] = useState(false);
 
-  const handleGenerate = (overrideForceWaldo: boolean = false) => {
-    const newData = getNewData(version, dimensions, overrideForceWaldo);
+  const handleGenerate = (overrideForceWaldo: boolean = false, config?: V3Config) => {
+    const newData = getNewData(version, dimensions, overrideForceWaldo, config);
     setCurrentData(newData);
     addToHistory(newData);
   };
 
   useEffect(() => {
+    const p = searchParams.get('p');
+    if (version === 'calm-day-n-plus-1' && p) {
+      try {
+        const decompressed = LZString.decompressFromEncodedURIComponent(p);
+        if (decompressed) {
+          const config = JSON.parse(decompressed) as V3Config;
+          handleGenerate(false, config);
+          return;
+        }
+      } catch (e) {
+        console.error("Failed to parse permalink config", e);
+      }
+    }
     handleGenerate();
      // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [version]);
+  }, [version, searchParams]);
+
+  const handleCopyPermalink = () => {
+    if (!currentData?.config) return;
+    const serialized = LZString.compressToEncodedURIComponent(JSON.stringify(currentData.config));
+    const url = `${window.location.origin}${window.location.pathname}?p=${serialized}`;
+    navigator.clipboard.writeText(url);
+    setShowCopyFeedback(true);
+    setTimeout(() => setShowCopyFeedback(false), 2000);
+  };
+
+  const handleNewImagine = (override: boolean = false) => {
+    if (searchParams.has('p')) {
+      router.push(window.location.pathname);
+    } else {
+      handleGenerate(override);
+    }
+  };
 
   const showRenderToggle = true;
+  const showShareButton = !!currentData?.config;
 
   const handleRenderModeChange = (mode: RenderMode) => {
     if (mode === renderMode) return;
     setIsRendering(true);
-    // Defer the actual mode switch to allow the loading UI to paint
     setTimeout(() => {
       setRenderMode(mode);
-      // Keep overlay for a minimum duration to avoid flicker
       setTimeout(() => setIsRendering(false), 300);
     }, 50);
   };
@@ -109,13 +143,25 @@ export default function VersionClient({ version }: { version: Version }) {
 
           <div className="flex flex-col items-center gap-2">
             <span className="text-[9px] font-mono uppercase opacity-20 tracking-[0.3em]">Actions</span>
-            <button 
-               onClick={(e) => handleGenerate(e.shiftKey)} 
-               className="flex items-center gap-3 h-11 px-8 bg-white/10 backdrop-blur-3xl border border-white/10 rounded-xl font-bold transition-all hover:bg-white/20 active:scale-[0.98] group shadow-2xl ring-1 ring-white/5"
-            >
-               <RefreshCw className="w-3.5 h-3.5 group-hover:rotate-180 transition-transform duration-700 text-neutral-400" />
-               <span className="text-[10px] tracking-widest uppercase text-white">Re-Imagine</span>
-            </button>
+            <div className="flex gap-3">
+              {showShareButton && (
+                <button 
+                  onClick={handleCopyPermalink}
+                  className="flex items-center gap-2 h-11 px-6 bg-white/5 backdrop-blur-3xl border border-white/10 rounded-xl font-bold transition-all hover:bg-white/10 active:scale-[0.98] group shadow-2xl ring-1 ring-white/5"
+                  title="Copy Permalink"
+                >
+                  {showCopyFeedback ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Share2 className="w-3.5 h-3.5 text-neutral-400" />}
+                  <span className="text-[10px] tracking-widest uppercase text-white">{showCopyFeedback ? 'Copied' : 'Share'}</span>
+                </button>
+              )}
+              <button 
+                 onClick={(e) => handleNewImagine(e.shiftKey)} 
+                 className="flex items-center gap-3 h-11 px-8 bg-white/10 backdrop-blur-3xl border border-white/10 rounded-xl font-bold transition-all hover:bg-white/20 active:scale-[0.98] group shadow-2xl ring-1 ring-white/5"
+              >
+                 <RefreshCw className="w-3.5 h-3.5 group-hover:rotate-180 transition-transform duration-700 text-neutral-400" />
+                 <span className="text-[10px] tracking-widest uppercase text-white">Re-Imagine</span>
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -155,15 +201,16 @@ export default function VersionClient({ version }: { version: Version }) {
           </div>
         </div>
 
-                  <div className="mt-12 max-w-2xl text-center">
-                    <p className="text-neutral-400 text-sm leading-relaxed font-light tracking-wide">
-                      {currentData?.version === 'prismatic-sails' && "An early generative exploration based roughly on 'Calm Day at Sea II', created with loose prompting to Gemini 2.5."}
-                      {currentData?.version === 'the-watchers' && "Another early experimental piece inspired by 'Calm Day at Sea II', developed through iterative prompting with Gemini 2.5."}
-                      {currentData?.version === 'calm-day-at-sea-ii' && "A high-fidelity reference of 'Calm Day at Sea II', interpreted by Gemini 3.1 Pro from a reference image."}
-                      {currentData?.version === 'calm-day-at-sea-iii' && "A master reference resulting from a specific request to Gemini 3.1 Pro to interpret and animate 'Calm Day at Sea III' as a hand-crafted SVG."}
-                      {currentData?.version === 'calm-day-n-plus-1' && "A programmatic attempt to generate new scenarios based on the 'Calm Day at Sea III' reference, with code assistance from Gemini 3.1 Pro."}
-                    </p>
-                  </div>      </div>
+        <div className="mt-12 max-w-2xl text-center">
+          <p className="text-neutral-400 text-sm leading-relaxed font-light tracking-wide">
+            {currentData?.version === 'prismatic-sails' && "An early generative exploration based roughly on 'Calm Day at Sea II', created with loose prompting to Gemini 2.5."}
+            {currentData?.version === 'the-watchers' && "Another early experimental piece inspired by 'Calm Day at Sea II', developed through iterative prompting with Gemini 2.5."}
+            {currentData?.version === 'calm-day-at-sea-ii' && "A high-fidelity reference of 'Calm Day at Sea II', interpreted by Gemini 3.1 Pro from a reference image."}
+            {currentData?.version === 'calm-day-at-sea-iii' && "A master reference resulting from a specific request to Gemini 3.1 Pro to interpret and animate 'Calm Day at Sea III' as a hand-crafted SVG."}
+            {currentData?.version === 'calm-day-n-plus-1' && "A programmatic attempt to generate new scenarios based on the 'Calm Day at Sea III' reference, with code assistance from Gemini 3.1 Pro."}
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
