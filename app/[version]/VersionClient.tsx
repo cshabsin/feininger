@@ -9,7 +9,7 @@ import { FeiningerGemini3Canvas } from "../components/FeiningerGemini3Canvas";
 import { FeiningerV3 } from "../components/FeiningerV3";
 import { FeiningerV3Canvas } from "../components/FeiningerV3Canvas";
 import { useHistory } from "../context/HistoryContext";
-import { RefreshCw, Box } from "lucide-react";
+import { RefreshCw, Box, FileCode, Play } from "lucide-react";
 
 type Version = 'prismatic-sails' | 'the-watchers' | 'calm-day-n-plus-1' | 'calm-day-at-sea-iii';
 type RenderMode = 'svg' | 'canvas';
@@ -59,24 +59,27 @@ export default function VersionClient({ version }: { version: Version }) {
 
         <div className="flex items-center gap-10">
           {showRenderToggle && (
-            <div className="flex bg-black/60 backdrop-blur-3xl p-1 rounded-2xl border border-white/10 relative h-12 w-52 shadow-[0_0_40px_rgba(0,0,0,0.5)] ring-1 ring-white/10">
-               <div 
-                 className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-white border border-white/20 rounded-xl transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] shadow-[0_0_20px_rgba(255,255,255,0.2)] ${renderMode === 'canvas' ? 'translate-x-full' : 'translate-x-0'}`}
-               />
-               <button 
-                 onClick={() => setRenderMode('svg')}
-                 className={`flex-1 flex flex-col items-center justify-center z-10 transition-all duration-500 ${renderMode === 'svg' ? 'text-black font-bold' : 'text-neutral-500 hover:text-neutral-300'}`}
-               >
-                 <span className="text-[11px] font-bold tracking-wide">SVG</span>
-                 <span className="text-[8px] font-mono opacity-60 mt-0.5 tracking-tight uppercase">Vector</span>
-               </button>
-               <button 
-                 onClick={() => setRenderMode('canvas')}
-                 className={`flex-1 flex flex-col items-center justify-center z-10 transition-all duration-500 ${renderMode === 'canvas' ? 'text-black font-bold' : 'text-neutral-500 hover:text-neutral-300'}`}
-               >
-                 <span className="text-[11px] font-bold tracking-wide">Canvas</span>
-                 <span className="text-[8px] font-mono opacity-60 mt-0.5 tracking-tight uppercase">Raster</span>
-               </button>
+            <div className="flex flex-col items-center gap-2">
+              <span className="text-[9px] font-mono uppercase opacity-20 tracking-[0.3em]">Renderer</span>
+              <div className="flex bg-black/60 backdrop-blur-3xl p-1 rounded-xl border border-white/10 relative h-11 w-48 shadow-2xl ring-1 ring-white/5">
+                <div 
+                  className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-white rounded-lg transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] shadow-[0_0_25px_rgba(255,255,255,0.3)] ${renderMode === 'canvas' ? 'translate-x-full' : 'translate-x-0'}`}
+                />
+                <button 
+                  onClick={() => setRenderMode('svg')}
+                  className={`flex-1 flex items-center justify-center gap-2 z-10 transition-all duration-500 ${renderMode === 'svg' ? 'text-black font-black' : 'text-neutral-500 hover:text-neutral-300'}`}
+                >
+                  <FileCode className={`w-3.5 h-3.5 ${renderMode === 'svg' ? 'opacity-100' : 'opacity-40'}`} />
+                  <span className="text-[10px] tracking-widest uppercase">SVG</span>
+                </button>
+                <button 
+                  onClick={() => setRenderMode('canvas')}
+                  className={`flex-1 flex items-center justify-center gap-2 z-10 transition-all duration-500 ${renderMode === 'canvas' ? 'text-black font-black' : 'text-neutral-500 hover:text-neutral-300'}`}
+                >
+                  <Play className={`w-3.5 h-3.5 ${renderMode === 'canvas' ? 'opacity-100' : 'opacity-40'}`} />
+                  <span className="text-[10px] tracking-widest uppercase">Canvas</span>
+                </button>
+              </div>
             </div>
           )}
 
@@ -116,23 +119,6 @@ export default function VersionClient({ version }: { version: Version }) {
           </div>
         </div>
       </div>
-
-      <footer className="p-16 flex justify-center gap-24 text-neutral-500 bg-transparent">
-         <div className="flex flex-col items-center gap-3">
-           <span className="text-[10px] tracking-[0.4em] opacity-30 font-bold text-white uppercase">Architecture</span>
-           <span className="text-xs font-bold text-neutral-400 tracking-tight">{currentData?.version === 'calm-day-at-sea-iii' ? 'Calm Day at Sea III' : currentData?.version === 'calm-day-n-plus-1' ? 'Calm Day at Sea N+1' : currentData?.version === 'prismatic-sails' ? 'Prismatic Sails' : currentData?.version === 'the-watchers' ? 'The Watchers' : (currentData?.version || '-')}</span>
-         </div>
-         <div className="flex flex-col items-center gap-3">
-           <span className="text-[10px] tracking-[0.4em] opacity-30 font-bold text-white uppercase">Renderer</span>
-           <span className="text-xs font-bold text-neutral-400 tracking-tight">
-             {renderMode === 'svg' ? 'SVG' : 'Canvas'}
-           </span>
-         </div>
-         <div className="flex flex-col items-center gap-3">
-           <span className="text-[10px] tracking-[0.4em] opacity-30 font-bold text-white uppercase">Resolution</span>
-           <span className="text-xs font-bold text-neutral-400 tracking-tight">800 &times; 1200</span>
-         </div>
-      </footer>
     </div>
   );
 }
