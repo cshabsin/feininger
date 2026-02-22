@@ -19,8 +19,8 @@ export const Sidebar = () => {
         writing-mode-vertical rotate-180
         -mr-px
         ${isActive(href) 
-          ? 'bg-neutral-800 text-white border-white/20 z-20 translate-x-0 shadow-[-10px_0_30px_rgba(0,0,0,0.5)] scale-y-110' 
-          : 'bg-neutral-900/80 text-neutral-500 border-white/5 z-10 translate-x-4 hover:translate-x-2 hover:text-neutral-300'
+          ? 'bg-neutral-200 text-black border-white/20 z-20 translate-x-0 shadow-[-15px_0_40px_rgba(0,0,0,0.6)] scale-y-110 font-black' 
+          : 'bg-neutral-800 text-neutral-400 border-white/10 z-10 translate-x-6 hover:translate-x-3 hover:text-neutral-200'
         }
       `}
       style={{ 
@@ -35,7 +35,7 @@ export const Sidebar = () => {
       
       {/* Visual indicator for "active" overlap */}
       {isActive(href) && (
-        <div className="absolute right-[-2px] top-0 bottom-0 w-[4px] bg-neutral-800 z-30" />
+        <div className="absolute right-[-2px] top-0 bottom-0 w-[4px] bg-neutral-200 z-30" />
       )}
     </Link>
   );
