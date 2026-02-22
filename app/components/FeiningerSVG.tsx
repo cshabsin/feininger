@@ -8,10 +8,10 @@ interface FeiningerSVGProps {
 export const FeiningerSVG: React.FC<FeiningerSVGProps> = ({ data }) => {
   return (
     <svg
-      width={data.width}
-      height={data.height}
+      width="100%"
+      height="100%"
       viewBox={`0 0 ${data.width} ${data.height}`}
-      className="max-w-full h-auto max-h-[70vh]"
+      className="max-w-full h-auto max-h-[70vh] block"
       style={{ backgroundColor: data.version === 'the-watchers' ? '#F5F5F5' : '#F0F8FF' }}
     >
       <defs>

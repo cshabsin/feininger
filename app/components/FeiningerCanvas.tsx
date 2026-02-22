@@ -20,8 +20,8 @@ export const FeiningerCanvas: React.FC<FeiningerCanvasProps> = ({ data }) => {
     canvas.height = data.height * dpr;
     ctx.scale(dpr, dpr);
     // Set display size
-    canvas.style.width = `${data.width}px`;
-    canvas.style.height = `${data.height}px`;
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
 
     // 1. Background
     ctx.clearRect(0, 0, data.width, data.height);
@@ -171,7 +171,7 @@ export const FeiningerCanvas: React.FC<FeiningerCanvasProps> = ({ data }) => {
   return (
     <canvas
       ref={canvasRef}
-      className="max-w-full h-auto max-h-[70vh] bg-white"
+      className="max-w-full h-auto max-h-[70vh] block"
     />
   );
 };
