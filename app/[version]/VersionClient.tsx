@@ -65,33 +65,36 @@ export default function VersionClient({ version }: { version: Version }) {
           </div>
         </div>
 
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-10">
           {showRenderToggle && (
-            <div className="flex bg-white/5 backdrop-blur-xl p-1 rounded-full border border-white/10 relative h-10 w-44 shadow-2xl">
+            <div className="flex bg-black/40 backdrop-blur-3xl p-1 rounded-2xl border border-white/5 relative h-12 w-52 shadow-[0_0_40px_rgba(0,0,0,0.3)] ring-1 ring-white/5">
                <div 
-                 className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-gradient-to-br from-slate-500 to-slate-700 rounded-full transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] shadow-[0_0_15px_rgba(255,255,255,0.1)] ${renderMode === 'canvas' ? 'translate-x-full' : 'translate-x-0'}`}
+                 className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-gradient-to-br from-slate-400/20 to-slate-600/20 backdrop-blur-md border border-white/10 rounded-xl transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] shadow-[0_0_20px_rgba(255,255,255,0.05)] ${renderMode === 'canvas' ? 'translate-x-full' : 'translate-x-0'}`}
                />
                <button 
                  onClick={() => setRenderMode('svg')}
-                 className={`flex-1 flex items-center justify-center text-[10px] font-black z-10 transition-all duration-300 tracking-[0.2em] ${renderMode === 'svg' ? 'text-white' : 'text-neutral-500 hover:text-neutral-400'}`}
+                 className={`flex-1 flex flex-col items-center justify-center z-10 transition-all duration-500 ${renderMode === 'svg' ? 'text-white scale-105' : 'text-neutral-500 hover:text-neutral-400'}`}
                >
-                 SVG
+                 <span className="text-[10px] font-black tracking-[0.25em] uppercase">SVG</span>
+                 <span className="text-[8px] font-mono opacity-40 uppercase mt-0.5 tracking-tighter">Vector</span>
                </button>
                <button 
                  onClick={() => setRenderMode('canvas')}
-                 className={`flex-1 flex items-center justify-center text-[10px] font-black z-10 transition-all duration-300 tracking-[0.2em] ${renderMode === 'canvas' ? 'text-white' : 'text-neutral-500 hover:text-neutral-400'}`}
+                 className={`flex-1 flex flex-col items-center justify-center z-10 transition-all duration-500 ${renderMode === 'canvas' ? 'text-white scale-105' : 'text-neutral-500 hover:text-neutral-400'}`}
                >
-                 CANVAS
+                 <span className="text-[10px] font-black tracking-[0.25em] uppercase">Canvas</span>
+                 <span className="text-[8px] font-mono opacity-40 uppercase mt-0.5 tracking-tighter">Raster</span>
                </button>
             </div>
           )}
 
           <button 
              onClick={(e) => handleGenerate(e.shiftKey)} 
-             className="flex items-center gap-3 px-10 py-4 bg-white text-black hover:bg-neutral-200 rounded-full font-black transition-all shadow-[0_0_30px_rgba(255,255,255,0.15)] active:scale-95 uppercase tracking-tighter text-sm group"
+             className="flex items-center gap-4 px-12 py-4.5 bg-white text-black hover:bg-neutral-100 rounded-2xl font-black transition-all shadow-[0_0_50px_rgba(255,255,255,0.1)] active:scale-[0.98] uppercase tracking-widest text-xs group relative overflow-hidden"
           >
-             <RefreshCw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-700" />
-             Re-Imagine
+             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+             <RefreshCw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-700 relative z-10" />
+             <span className="relative z-10">Re-Imagine</span>
           </button>
         </div>
       </header>
