@@ -47,14 +47,18 @@ export default function VersionClient({ version }: { version: Version }) {
      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [version]);
 
-  // Provide visual feedback during renderer switch
-  useEffect(() => {
-    setIsRendering(true);
-    const timer = setTimeout(() => setIsRendering(false), 400);
-    return () => clearTimeout(timer);
-  }, [renderMode]);
-
   const showRenderToggle = true;
+
+  const handleRenderModeChange = (mode: RenderMode) => {
+    if (mode === renderMode) return;
+    setIsRendering(true);
+    // Defer the actual mode switch to allow the loading UI to paint
+    setTimeout(() => {
+      setRenderMode(mode);
+      // Keep overlay for a minimum duration to avoid flicker
+      setTimeout(() => setIsRendering(false), 300);
+    }, 50);
+  };
 
   return (
     <div className="flex-1 h-screen flex flex-col relative overflow-y-auto bg-[radial-gradient(circle_at_50%_0%,rgba(30,41,59,0.15),transparent)]">
@@ -79,14 +83,14 @@ export default function VersionClient({ version }: { version: Version }) {
                   className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-white rounded-lg transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] shadow-[0_0_25px_rgba(255,255,255,0.3)] ${renderMode === 'canvas' ? 'translate-x-full' : 'translate-x-0'}`}
                 />
                 <button 
-                  onClick={() => setRenderMode('svg')}
+                  onClick={() => handleRenderModeChange('svg')}
                   className={`flex-1 flex items-center justify-center gap-2 z-10 transition-all duration-500 ${renderMode === 'svg' ? 'text-black font-black' : 'text-neutral-500 hover:text-neutral-300'}`}
                 >
                   <FileCode className={`w-3.5 h-3.5 ${renderMode === 'svg' ? 'opacity-100' : 'opacity-40'}`} />
                   <span className="text-[10px] tracking-widest uppercase">SVG</span>
                 </button>
                 <button 
-                  onClick={() => setRenderMode('canvas')}
+                  onClick={() => handleRenderModeChange('canvas')}
                   className={`flex-1 flex items-center justify-center gap-2 z-10 transition-all duration-500 ${renderMode === 'canvas' ? 'text-black font-black' : 'text-neutral-500 hover:text-neutral-300'}`}
                 >
                   <Play className={`w-3.5 h-3.5 ${renderMode === 'canvas' ? 'opacity-100' : 'opacity-40'}`} />
