@@ -2,6 +2,7 @@
 
 import { useHistory } from "../context/HistoryContext";
 import { FeiningerSVG } from "../components/FeiningerSVG";
+import { FeiningerGemini2 } from "../components/FeiningerGemini2";
 import { FeiningerGemini3 } from "../components/FeiningerGemini3";
 import { FeiningerV3 } from "../components/FeiningerV3";
 import { Image } from "lucide-react";
@@ -35,7 +36,9 @@ export default function HistoryPage() {
             {history.map((item, index) => (
               <div key={`${item.version}-${item.seed}-${index}`} className="border border-white/5 rounded-2xl p-4 bg-black/40 backdrop-blur-sm flex flex-col gap-4 group hover:border-white/10 transition-all duration-500 hover:shadow-2xl">
                 <div className="overflow-hidden rounded-xl border border-white/5 shadow-inner bg-white ring-1 ring-white/5">
-                   {item.version === 'calm-day-at-sea-iii' ? (
+                   {item.version === 'calm-day-at-sea-ii' ? (
+                      <FeiningerGemini2 />
+                    ) : item.version === 'calm-day-at-sea-iii' ? (
                       <FeiningerGemini3 />
                     ) : item.version === 'calm-day-n-plus-1' ? (
                       <FeiningerV3 data={item} />
@@ -47,7 +50,10 @@ export default function HistoryPage() {
                 <div className="flex justify-between items-center px-1">
                    <div className="flex flex-col">
                      <span className="text-[10px] font-mono text-slate-500 uppercase tracking-tighter mb-0.5">
-                       {item.version === 'calm-day-at-sea-iii' ? 'Calm Day at Sea III' : item.version === 'calm-day-n-plus-1' ? 'Calm Day at Sea N+1' : item.version === 'prismatic-sails' ? 'Prismatic Sails' : 'The Watchers'}
+                       {item.version === 'calm-day-at-sea-ii' ? 'Calm Day at Sea II' : 
+                        item.version === 'calm-day-at-sea-iii' ? 'Calm Day at Sea III' : 
+                        item.version === 'calm-day-n-plus-1' ? 'Calm Day at Sea N+1' : 
+                        item.version === 'prismatic-sails' ? 'Prismatic Sails' : 'The Watchers'}
                      </span>
                      <span className="text-xs font-bold text-neutral-300 uppercase tracking-tight">
                        Edition {item.seed}

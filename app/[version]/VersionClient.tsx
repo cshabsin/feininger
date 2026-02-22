@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { generateFeiningerV1, generateFeiningerV2, generateFeiningerV3, generateFeiningerGemini3, FeiningerData } from "../../lib/feininger";
+import { generateFeiningerV1, generateFeiningerV2, generateFeiningerV3, generateFeiningerGemini2, generateFeiningerGemini3, FeiningerData } from "../../lib/feininger";
 import { FeiningerSVG } from "../components/FeiningerSVG";
 import { FeiningerCanvas } from "../components/FeiningerCanvas";
+import { FeiningerGemini2 } from "../components/FeiningerGemini2";
 import { FeiningerGemini3 } from "../components/FeiningerGemini3";
 import { FeiningerGemini3Canvas } from "../components/FeiningerGemini3Canvas";
 import { FeiningerV3 } from "../components/FeiningerV3";
@@ -11,7 +12,7 @@ import { FeiningerV3Canvas } from "../components/FeiningerV3Canvas";
 import { useHistory } from "../context/HistoryContext";
 import { RefreshCw, Box, FileCode, Play } from "lucide-react";
 
-type Version = 'prismatic-sails' | 'the-watchers' | 'calm-day-n-plus-1' | 'calm-day-at-sea-iii';
+type Version = 'prismatic-sails' | 'the-watchers' | 'calm-day-n-plus-1' | 'calm-day-at-sea-ii' | 'calm-day-at-sea-iii';
 type RenderMode = 'svg' | 'canvas';
 
 // Helper to generate new data
@@ -19,6 +20,8 @@ const getNewData = (version: Version, dimensions: {width: number, height: number
   switch (version) {
     case 'prismatic-sails':
       return generateFeiningerV1(dimensions.width, dimensions.height);
+    case 'calm-day-at-sea-ii':
+      return generateFeiningerGemini2(dimensions.width, dimensions.height);
     case 'calm-day-at-sea-iii':
       return generateFeiningerGemini3(dimensions.width, dimensions.height);
     case 'calm-day-n-plus-1':
@@ -33,7 +36,7 @@ export default function VersionClient({ version }: { version: Version }) {
   const [dimensions] = useState({ width: 800, height: 600 });
   const [currentData, setCurrentData] = useState<FeiningerData | null>(null);
   const { addToHistory } = useHistory();
-  const [renderMode, setRenderMode] = useState<RenderMode>(() => version === 'calm-day-at-sea-iii' ? 'svg' : 'canvas');
+  const [renderMode, setRenderMode] = useState<RenderMode>(() => (version === 'calm-day-at-sea-iii' || version === 'calm-day-at-sea-ii') ? 'svg' : 'canvas');
   const [isRendering, setIsRendering] = useState(false);
 
   const handleGenerate = (overrideForceWaldo: boolean = false) => {
@@ -65,7 +68,11 @@ export default function VersionClient({ version }: { version: Version }) {
       <header className="flex items-center justify-between px-10 py-10 bg-transparent sticky top-0 z-20">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-white drop-shadow-2xl">
-            {currentData?.version === 'prismatic-sails' ? 'Prismatic Sails' : currentData?.version === 'the-watchers' ? 'The Watchers' : currentData?.version === 'calm-day-n-plus-1' ? 'Calm Day at Sea N+1' : 'Calm Day at Sea III'}
+            {currentData?.version === 'prismatic-sails' ? 'Prismatic Sails' : 
+             currentData?.version === 'the-watchers' ? 'The Watchers' : 
+             currentData?.version === 'calm-day-n-plus-1' ? 'Calm Day at Sea N+1' : 
+             currentData?.version === 'calm-day-at-sea-ii' ? 'Calm Day at Sea II' :
+             'Calm Day at Sea III'}
           </h1>
           <div className="flex items-center gap-3 mt-2">
              <span className="text-[10px] text-neutral-500 font-mono opacity-40 uppercase">
@@ -114,7 +121,7 @@ export default function VersionClient({ version }: { version: Version }) {
       </header>
 
       <div className="flex-1 flex flex-col items-center justify-center p-12 overflow-y-auto">
-        <div className={`relative group w-full ${currentData?.width === 800 && currentData?.height === 1200 ? 'max-w-[400px]' : 'max-w-[800px]'} transition-all duration-500`}>
+        <div className={`relative group w-full ${currentData?.width === 800 && currentData?.height === 1200 ? 'max-w-[400px]' : 'max-w-[800px]'}`}>
           <div className="absolute -inset-2 bg-gradient-to-r from-slate-800 to-neutral-800 rounded-lg blur-2xl opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
           
           <div className="relative border-[1px] border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)] bg-neutral-900 overflow-hidden rounded-sm ring-1 ring-white/5 w-full">
@@ -128,7 +135,9 @@ export default function VersionClient({ version }: { version: Version }) {
 
             {currentData ? (
               <>
-                {currentData.version === 'calm-day-at-sea-iii' ? (
+                {currentData.version === 'calm-day-at-sea-ii' ? (
+                  renderMode === 'svg' ? <FeiningerGemini2 /> : <div className="flex items-center justify-center h-full w-full bg-neutral-900 text-neutral-500 font-mono text-[10px] uppercase tracking-[0.2em] italic">Canvas version coming soon</div>
+                ) : currentData.version === 'calm-day-at-sea-iii' ? (
                   renderMode === 'svg' ? <FeiningerGemini3 /> : <FeiningerGemini3Canvas />
                 ) : currentData.version === 'calm-day-n-plus-1' ? (
                   renderMode === 'svg' ? <FeiningerV3 data={currentData} /> : <FeiningerV3Canvas data={currentData} />
@@ -146,15 +155,15 @@ export default function VersionClient({ version }: { version: Version }) {
           </div>
         </div>
 
-        <div className="mt-12 max-w-2xl text-center">
-          <p className="text-neutral-400 text-sm leading-relaxed font-light tracking-wide">
-            {currentData?.version === 'prismatic-sails' && "An early generative exploration based roughly on 'Calm Day at Sea II', created with loose prompting to Gemini 2.5."}
-            {currentData?.version === 'the-watchers' && "Another early experimental piece inspired by 'Calm Day at Sea II', developed through iterative prompting with Gemini 2.5."}
-            {currentData?.version === 'calm-day-at-sea-iii' && "A master reference resulting from a specific request to Gemini 3.1 Pro to interpret and animate 'Calm Day at Sea III' as a hand-crafted SVG."}
-            {currentData?.version === 'calm-day-n-plus-1' && "A programmatic attempt to generate new scenarios based on the 'Calm Day at Sea III' reference, with code assistance from Gemini 3.1 Pro."}
-          </p>
-        </div>
-      </div>
+                  <div className="mt-12 max-w-2xl text-center">
+                    <p className="text-neutral-400 text-sm leading-relaxed font-light tracking-wide">
+                      {currentData?.version === 'prismatic-sails' && "An early generative exploration based roughly on 'Calm Day at Sea II', created with loose prompting to Gemini 2.5."}
+                      {currentData?.version === 'the-watchers' && "Another early experimental piece inspired by 'Calm Day at Sea II', developed through iterative prompting with Gemini 2.5."}
+                      {currentData?.version === 'calm-day-at-sea-ii' && "A high-fidelity reference of 'Calm Day at Sea II', interpreted by Gemini 3.1 Pro from a reference image."}
+                      {currentData?.version === 'calm-day-at-sea-iii' && "A master reference resulting from a specific request to Gemini 3.1 Pro to interpret and animate 'Calm Day at Sea III' as a hand-crafted SVG."}
+                      {currentData?.version === 'calm-day-n-plus-1' && "A programmatic attempt to generate new scenarios based on the 'Calm Day at Sea III' reference, with code assistance from Gemini 3.1 Pro."}
+                    </p>
+                  </div>      </div>
     </div>
   );
 }

@@ -1,0 +1,77 @@
+"use client";
+
+import React from 'react';
+
+export const FeiningerGemini2: React.FC = () => {
+  return (
+    <svg 
+      viewBox="0 0 1000 562" 
+      xmlns="http://www.w3.org/2000/svg"
+      width="100%"
+      height="100%"
+      className="max-w-full h-auto block"
+      style={{ backgroundColor: '#D9DFD6' }}
+    >
+      {/* Base Background */}
+      <rect width="1000" height="562" fill="#D9DFD6" />
+
+      {/* Vertical Light Planes */}
+      <rect x="70" y="0" width="80" height="562" fill="#F0F4ED" opacity="0.6" />
+      <rect x="680" y="0" width="70" height="562" fill="#EAEBE1" opacity="0.5" />
+      <rect x="300" y="0" width="300" height="562" fill="#E5E8E0" opacity="0.3" />
+
+      {/* Horizontal Light Planes */}
+      <rect x="0" y="50" width="1000" height="60" fill="#B4C0C5" opacity="0.3" />
+      <rect x="0" y="150" width="1000" height="40" fill="#D2D6CF" opacity="0.4" />
+      <rect x="0" y="300" width="1000" height="100" fill="#DBCFA6" opacity="0.3" />
+
+      {/* Geometric Blocks */}
+      <rect x="100" y="150" width="220" height="300" fill="#A89D82" opacity="0.5" />
+      <rect x="700" y="70" width="180" height="330" fill="#998E7B" opacity="0.5" />
+      <rect x="180" y="100" width="100" height="200" fill="#90856A" opacity="0.2" />
+
+      {/* Sea & Horizon */}
+      <rect x="0" y="400" width="1000" height="100" fill="#668BBF" opacity="0.8" />
+      <rect x="0" y="440" width="1000" height="60" fill="#5072A6" opacity="0.7" />
+      <rect x="240" y="400" width="760" height="100" fill="#406399" opacity="0.4" />
+      <rect x="0" y="410" width="150" height="40" fill="#88A5D6" opacity="0.5" />
+      <rect x="750" y="400" width="250" height="100" fill="#4C70A8" opacity="0.4" />
+
+      {/* Earth Foreground */}
+      <rect x="0" y="500" width="1000" height="62" fill="#8C5C35" />
+      <rect x="0" y="520" width="400" height="42" fill="#663A18" opacity="0.8" />
+      <polygon points="380,510 1000,510 1000,562 300,562" fill="#A47240" opacity="0.7" />
+      <rect x="600" y="530" width="400" height="32" fill="#523218" opacity="0.7" />
+      <polygon points="100,500 200,500 150,562 0,562" fill="#472A15" opacity="0.5" />
+
+      {/* Left-Center Structure in Water */}
+      <rect x="245" y="400" width="80" height="70" fill="#29405E" opacity="0.9" />
+      <rect x="245" y="400" width="80" height="15" fill="#1A2C42" opacity="0.7" />
+      <rect x="300" y="320" width="4" height="80" fill="#1C2E45" opacity="0.8" />
+
+      {/* Horizon Boat */}
+      <polygon points="820,395 835,395 832,400 825,400" fill="#754E33" />
+      <rect x="828" y="375" width="2" height="20" fill="#754E33" />
+
+      {/* Left Figure */}
+      <polygon points="85,535 88,460 92,460 95,535" fill="#8C2B10" />
+      <polygon points="81,535 88,460 86,535" fill="#D8542E" />
+      <polygon points="88,460 90,445 92,460" fill="#C24221" />
+      <rect x="65" y="480" width="45" height="55" fill="#7FA4D4" opacity="0.5" />
+      <rect x="75" y="430" width="20" height="105" fill="#EAEBE1" opacity="0.2" />
+
+      {/* Right Figures / Structures */}
+      <polygon points="742,510 752,460 757,430 762,510" fill="#3A1F0D" />
+      <polygon points="762,510 762,440 778,440 778,510" fill="#F4F6F0" />
+      <polygon points="762,440 770,425 778,440" fill="#EAEBE1" />
+      <polygon points="778,510 778,455 792,455 798,510" fill="#6A8CB5" />
+      <polygon points="762,510 768,480 778,480 778,510" fill="#C0C8C5" opacity="0.8" />
+      <rect x="745" y="440" width="60" height="70" fill="#88A5D6" opacity="0.4" />
+
+      {/* Fine Linear Details */}
+      <line x1="0" y1="200" x2="1000" y2="200" stroke="#FFFFFF" strokeWidth="2" opacity="0.2" />
+      <line x1="245" y1="0" x2="245" y2="500" stroke="#FFFFFF" strokeWidth="3" opacity="0.1" />
+      <line x1="775" y1="0" x2="775" y2="440" stroke="#FFFFFF" strokeWidth="2" opacity="0.2" />
+    </svg>
+  );
+};

@@ -58,7 +58,8 @@ export const Sidebar = () => {
         <TabLink href="/prismatic-sails" label="Prismatic Sails" id="V1" />
         <TabLink href="/the-watchers" label="The Watchers" id="V2" />
         <TabLink href="/calm-day-n-plus-1" label="Calm Day N+1" id="V3" />
-        <TabLink href="/calm-day-at-sea-iii" label="Calm Day III" id="REF" />
+        <TabLink href="/calm-day-at-sea-ii" label="Calm Day II" id="REF2" />
+        <TabLink href="/calm-day-at-sea-iii" label="Calm Day III" id="REF3" />
       </nav>
 
       <div className="mt-auto w-full flex justify-center px-2">

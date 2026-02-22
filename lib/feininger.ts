@@ -25,7 +25,7 @@ export interface FeiningerData {
   height: number;
   shapes: Shape[];
   horizonY: number;
-  version: 'prismatic-sails' | 'the-watchers' | 'calm-day-n-plus-1' | 'calm-day-at-sea-iii';
+  version: 'prismatic-sails' | 'the-watchers' | 'calm-day-n-plus-1' | 'calm-day-at-sea-ii' | 'calm-day-at-sea-iii';
   regions?: Region[];
   seed: number;
 }
@@ -1073,6 +1073,17 @@ export function generateFeiningerV3(width: number, height: number): FeiningerDat
   }
 
   return { width: 800, height: 1200, shapes, horizonY, version: 'calm-day-n-plus-1', seed };
+}
+
+export function generateFeiningerGemini2(width: number, height: number): FeiningerData {
+  return {
+    width: 1000,
+    height: 562,
+    shapes: [],
+    horizonY: 400,
+    version: 'calm-day-at-sea-ii',
+    seed: 0
+  };
 }
 
 export function generateFeiningerGemini3(width: number, height: number): FeiningerData {
