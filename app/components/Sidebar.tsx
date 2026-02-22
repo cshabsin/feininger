@@ -15,25 +15,24 @@ export const Sidebar = () => {
       className={`
         relative flex items-center justify-center 
         transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]
-        rounded-l-xl border-y border-l
         -mr-px
         ${isActive(href) 
           ? 'text-black z-20 translate-x-0 shadow-[-15px_0_40px_rgba(0,0,0,0.6)] font-black' 
-          : 'text-neutral-400 border-white/5 z-10 translate-x-6 hover:translate-x-3 hover:text-neutral-200'
+          : 'text-white border-white/5 z-10 translate-x-6 hover:translate-x-3 hover:text-white opacity-60 hover:opacity-100'
         }
       `}
       style={{ 
         height: '140px',
-        width: '48px',
-        backgroundColor: isActive(href) ? '#e5e5e5' : '#262626', // Explicit grey hex codes
-        borderColor: isActive(href) ? '#ffffff44' : '#ffffff11'
+        width: '56px',
+        backgroundColor: isActive(href) ? '#e5e5e5' : '#333333', // Lighter dark grey for better contrast
+        clipPath: 'polygon(20% 0%, 100% 0%, 100% 100%, 20% 100%, 0% 90%, 0% 10%)', // Skeuomorphic tab shape
       }}
     >
       <div 
         className="flex items-center gap-4 whitespace-nowrap"
         style={{ transform: 'rotate(90deg)' }}
       >
-        <span className="font-mono text-[9px] opacity-40 tracking-widest uppercase">{id}</span>
+        <span className={`font-mono text-[9px] tracking-widest uppercase ${isActive(href) ? 'opacity-60' : 'opacity-40'}`}>{id}</span>
         <span className="font-black text-[11px] uppercase tracking-normal">{label}</span>
       </div>
       
