@@ -1,13 +1,13 @@
 import VersionClient from './VersionClient';
 
-type Version = 'v1' | 'v2' | 'v3' | 'gemini3';
+type Version = 'prismatic-sails' | 'the-watchers' | 'calm-day-n-plus-1' | 'calm-day-at-sea-iii';
 
 export async function generateStaticParams() {
   return [
-    { version: 'v1' },
-    { version: 'v2' },
-    { version: 'v3' },
-    { version: 'gemini3' },
+    { version: 'prismatic-sails' },
+    { version: 'the-watchers' },
+    { version: 'calm-day-n-plus-1' },
+    { version: 'calm-day-at-sea-iii' },
   ]
 }
 

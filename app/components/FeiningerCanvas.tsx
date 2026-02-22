@@ -25,7 +25,7 @@ export const FeiningerCanvas: React.FC<FeiningerCanvasProps> = ({ data }) => {
 
     // 1. Background
     ctx.clearRect(0, 0, data.width, data.height);
-    ctx.fillStyle = data.version === 'v2' ? '#F5F5F5' : '#F0F8FF';
+    ctx.fillStyle = data.version === 'the-watchers' ? '#F5F5F5' : '#F0F8FF';
     ctx.fillRect(0, 0, data.width, data.height);
 
     // Helper: Draw Rough Polygon

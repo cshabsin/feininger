@@ -25,7 +25,7 @@ export interface FeiningerData {
   height: number;
   shapes: Shape[];
   horizonY: number;
-  version: 'v1' | 'v2' | 'v3' | 'gemini3';
+  version: 'prismatic-sails' | 'the-watchers' | 'calm-day-n-plus-1' | 'calm-day-at-sea-iii';
   regions?: Region[];
   seed: number;
 }
@@ -173,7 +173,7 @@ export function generateFeiningerV1(width: number, height: number): FeiningerDat
      });
   }
 
-  return { width, height, shapes, horizonY, version: 'v1', seed };
+  return { width, height, shapes, horizonY, version: 'prismatic-sails', seed };
 }
 
 // --- V2 Generator (Figures on Shore) ---
@@ -855,7 +855,7 @@ export function generateFeiningerV2(width: number, height: number, forceWaldo: b
   }
 
   
-    return { width, height, shapes, horizonY, version: 'v2', regions, seed };
+    return { width, height, shapes, horizonY, version: 'the-watchers', regions, seed };
   }
   
   const PALETTE_CALM_DAY_SAILS = [
@@ -993,21 +993,55 @@ export function generateFeiningerV3(width: number, height: number): FeiningerDat
     opacity: 1
   });
 
-  // Sky Shards
-  const skyPalette = ["#18273d", "#335675", "#20334a", "#fad155", "#e08e1b", "#bf4c13"];
-  for (let i = 0; i < 8; i++) {
+  // Sky Shards (Rock Formations)
+  const skyPaletteCool = ["#18273d", "#335675", "#20334a", "#4e6f8a", "#132338"];
+  const skyPaletteWarm = ["#fad155", "#e08e1b", "#bf4c13", "#f7cd59", "#d49333"];
+  
+  // Left side formations (Cool)
+  const numLeftRocks = randomInt(4, 7);
+  for (let i = 0; i < numLeftRocks; i++) {
+    const xBase = randomRange(0, 400);
+    const rockWidth = randomRange(100, 300);
+    const topY = randomRange(0, 400);
+    const baseSkew = randomRange(-100, 100);
+
     shapes.push({
-      id: `sky-shard-${i}`,
+      id: `rock-left-${i}`,
       type: 'polygon',
       points: [
-        { x: randomRange(0, 800), y: 0 },
-        { x: randomRange(0, 800), y: 0 },
-        { x: randomRange(0, 800), y: 900 },
-        { x: randomRange(0, 800), y: 900 }
+        { x: xBase, y: topY },
+        { x: xBase + rockWidth * 0.5, y: topY * 0.5 },
+        { x: xBase + rockWidth, y: topY },
+        { x: xBase + rockWidth + baseSkew, y: 900 },
+        { x: xBase + baseSkew, y: 900 }
       ],
-      fill: randomChoice(skyPalette),
-      opacity: randomRange(0.3, 0.7),
-      blendMode: Math.random() > 0.5 ? 'overlay' : 'multiply'
+      fill: randomChoice(skyPaletteCool),
+      opacity: randomRange(0.4, 0.8),
+      blendMode: Math.random() > 0.3 ? 'multiply' : 'normal'
+    });
+  }
+
+  // Right side formations (Warm)
+  const numRightRocks = randomInt(4, 7);
+  for (let i = 0; i < numRightRocks; i++) {
+    const xBase = randomRange(400, 800);
+    const rockWidth = randomRange(100, 300);
+    const topY = randomRange(0, 400);
+    const baseSkew = randomRange(-100, 100);
+
+    shapes.push({
+      id: `rock-right-${i}`,
+      type: 'polygon',
+      points: [
+        { x: xBase, y: topY },
+        { x: xBase + rockWidth * 0.5, y: topY * 0.5 },
+        { x: xBase + rockWidth, y: topY },
+        { x: xBase + rockWidth + baseSkew, y: 900 },
+        { x: xBase + baseSkew, y: 900 }
+      ],
+      fill: randomChoice(skyPaletteWarm),
+      opacity: randomRange(0.4, 0.8),
+      blendMode: Math.random() > 0.3 ? 'overlay' : 'normal'
     });
   }
 
@@ -1033,7 +1067,7 @@ export function generateFeiningerV3(width: number, height: number): FeiningerDat
     });
   }
 
-  return { width: 800, height: 1200, shapes, horizonY, version: 'v3', seed };
+  return { width: 800, height: 1200, shapes, horizonY, version: 'calm-day-n-plus-1', seed };
 }
 
 export function generateFeiningerGemini3(width: number, height: number): FeiningerData {
@@ -1042,7 +1076,7 @@ export function generateFeiningerGemini3(width: number, height: number): Feining
     height: 1200,
     shapes: [],
     horizonY: 900,
-    version: 'gemini3',
+    version: 'calm-day-at-sea-iii',
     seed: 0
   };
 }

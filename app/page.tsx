@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 
 export default function RootPage() {
   useEffect(() => {
-    redirect('/v2');
+    redirect('/the-watchers');
   }, []);
 
   return (

@@ -11,7 +11,7 @@ export default function HistoryPage() {
 
   return (
     <div className="flex-1 h-screen flex flex-col relative overflow-y-auto bg-[radial-gradient(circle_at_50%_0%,rgba(30,41,59,0.15),transparent)]">
-      <header className="flex items-center justify-between px-10 py-8 border-b border-white/5 bg-neutral-950/20 backdrop-blur-md sticky top-0 z-20">
+      <header className="flex items-center justify-between px-10 py-10 bg-transparent sticky top-0 z-20">
         <div className="flex items-center gap-4">
           <Image className="w-8 h-8 text-neutral-500" />
           <div>
@@ -35,9 +35,9 @@ export default function HistoryPage() {
             {history.map((item, index) => (
               <div key={`${item.version}-${item.seed}-${index}`} className="border border-white/5 rounded-2xl p-4 bg-black/40 backdrop-blur-sm flex flex-col gap-4 group hover:border-white/10 transition-all duration-500 hover:shadow-2xl">
                 <div className="overflow-hidden rounded-xl border border-white/5 shadow-inner bg-white ring-1 ring-white/5">
-                   {item.version === 'gemini3' ? (
+                   {item.version === 'calm-day-at-sea-iii' ? (
                       <FeiningerGemini3 />
-                    ) : item.version === 'v3' ? (
+                    ) : item.version === 'calm-day-n-plus-1' ? (
                       <FeiningerV3 data={item} />
                     ) : (
                       <FeiningerSVG data={item} />
@@ -47,7 +47,7 @@ export default function HistoryPage() {
                 <div className="flex justify-between items-center px-1">
                    <div className="flex flex-col">
                      <span className="text-[10px] font-mono text-slate-500 uppercase tracking-tighter mb-0.5">
-                       {item.version === 'gemini3' ? 'Calm Day at Sea III' : item.version === 'v3' ? 'Calm Day at Sea N+1' : item.version}
+                       {item.version === 'calm-day-at-sea-iii' ? 'Calm Day at Sea III' : item.version === 'calm-day-n-plus-1' ? 'Calm Day at Sea N+1' : item.version === 'prismatic-sails' ? 'Prismatic Sails' : 'The Watchers'}
                      </span>
                      <span className="text-xs font-bold text-neutral-300 uppercase tracking-tight">
                        Edition {item.seed}

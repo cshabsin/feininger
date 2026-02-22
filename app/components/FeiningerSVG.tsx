@@ -12,7 +12,7 @@ export const FeiningerSVG: React.FC<FeiningerSVGProps> = ({ data }) => {
       height={data.height}
       viewBox={`0 0 ${data.width} ${data.height}`}
       className="max-w-full h-auto max-h-[70vh]"
-      style={{ backgroundColor: data.version === 'v2' ? '#F5F5F5' : '#F0F8FF' }}
+      style={{ backgroundColor: data.version === 'the-watchers' ? '#F5F5F5' : '#F0F8FF' }}
     >
       <defs>
         {/* Canvas Texture Filter (Global Overlay) */}
