@@ -67,23 +67,23 @@ export default function VersionClient({ version }: { version: Version }) {
 
         <div className="flex items-center gap-10">
           {showRenderToggle && (
-            <div className="flex bg-black/40 backdrop-blur-3xl p-1 rounded-2xl border border-white/5 relative h-12 w-52 shadow-[0_0_40px_rgba(0,0,0,0.3)] ring-1 ring-white/5">
+            <div className="flex bg-black/60 backdrop-blur-3xl p-1 rounded-2xl border border-white/10 relative h-12 w-52 shadow-[0_0_40px_rgba(0,0,0,0.5)] ring-1 ring-white/10">
                <div 
-                 className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-gradient-to-br from-slate-400/20 to-slate-600/20 backdrop-blur-md border border-white/10 rounded-xl transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] shadow-[0_0_20px_rgba(255,255,255,0.05)] ${renderMode === 'canvas' ? 'translate-x-full' : 'translate-x-0'}`}
+                 className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-white border border-white/20 rounded-xl transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] shadow-[0_0_20px_rgba(255,255,255,0.2)] ${renderMode === 'canvas' ? 'translate-x-full' : 'translate-x-0'}`}
                />
                <button 
                  onClick={() => setRenderMode('svg')}
-                 className={`flex-1 flex flex-col items-center justify-center z-10 transition-all duration-500 ${renderMode === 'svg' ? 'text-white scale-105' : 'text-neutral-500 hover:text-neutral-400'}`}
+                 className={`flex-1 flex flex-col items-center justify-center z-10 transition-all duration-500 ${renderMode === 'svg' ? 'text-black scale-100' : 'text-neutral-500 hover:text-neutral-300'}`}
                >
                  <span className="text-[10px] font-black tracking-[0.25em] uppercase">SVG</span>
-                 <span className="text-[8px] font-mono opacity-40 uppercase mt-0.5 tracking-tighter">Vector</span>
+                 <span className="text-[8px] font-mono opacity-60 uppercase mt-0.5 tracking-tighter">Vector</span>
                </button>
                <button 
                  onClick={() => setRenderMode('canvas')}
-                 className={`flex-1 flex flex-col items-center justify-center z-10 transition-all duration-500 ${renderMode === 'canvas' ? 'text-white scale-105' : 'text-neutral-500 hover:text-neutral-400'}`}
+                 className={`flex-1 flex flex-col items-center justify-center z-10 transition-all duration-500 ${renderMode === 'canvas' ? 'text-black scale-100' : 'text-neutral-500 hover:text-neutral-300'}`}
                >
                  <span className="text-[10px] font-black tracking-[0.25em] uppercase">Canvas</span>
-                 <span className="text-[8px] font-mono opacity-40 uppercase mt-0.5 tracking-tighter">Raster</span>
+                 <span className="text-[8px] font-mono opacity-60 uppercase mt-0.5 tracking-tighter">Raster</span>
                </button>
             </div>
           )}
