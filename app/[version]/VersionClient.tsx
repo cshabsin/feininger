@@ -103,7 +103,7 @@ export default function VersionClient({ version }: { version: Version }) {
 
       <div className="flex-1 flex items-center justify-center p-12">
         <div className="flex flex-col items-center w-full">
-          <div className="relative group max-w-[800px] w-full">
+          <div className={`relative group w-full ${currentData?.width === 800 && currentData?.height === 1200 ? 'max-w-[400px]' : 'max-w-[800px]'}`}>
             <div className="absolute -inset-2 bg-gradient-to-r from-slate-800 to-neutral-800 rounded-lg blur-2xl opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
             
             <div className="relative border-[1px] border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)] bg-white overflow-hidden rounded-sm ring-1 ring-white/5 w-full">
