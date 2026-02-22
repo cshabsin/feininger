@@ -15,17 +15,18 @@ export const Sidebar = () => {
       className={`
         relative flex items-center justify-center 
         transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]
-        -mr-px
+        -mr-px no-underline
         ${isActive(href) 
-          ? 'text-black z-20 translate-x-0 shadow-[-15px_0_40px_rgba(0,0,0,0.6)] font-black' 
-          : 'text-white border-white/5 z-10 translate-x-6 hover:translate-x-3 hover:text-white opacity-60 hover:opacity-100'
+          ? 'z-20 translate-x-0 shadow-[-15px_0_40px_rgba(0,0,0,0.6)] font-black' 
+          : 'z-10 translate-x-6 hover:translate-x-3 opacity-60 hover:opacity-100'
         }
       `}
       style={{ 
         height: '140px',
         width: '56px',
-        backgroundColor: isActive(href) ? '#e5e5e5' : '#333333', // Lighter dark grey for better contrast
-        clipPath: 'polygon(20% 0%, 100% 0%, 100% 100%, 20% 100%, 0% 90%, 0% 10%)', // Skeuomorphic tab shape
+        backgroundColor: isActive(href) ? '#e5e5e5' : '#333333',
+        color: isActive(href) ? '#000000' : '#ffffff', // Explicit white/black text
+        clipPath: 'polygon(20% 0%, 100% 0%, 100% 100%, 20% 100%, 0% 90%, 0% 10%)',
       }}
     >
       <div 
