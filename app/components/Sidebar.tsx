@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Box, Image } from "lucide-react";
+import { FlaskConical, Image } from "lucide-react";
 
 export const Sidebar = () => {
   const pathname = usePathname();
@@ -48,9 +48,9 @@ export const Sidebar = () => {
 
   return (
     <aside className="w-16 bg-neutral-950 flex flex-col items-end py-8 gap-2 overflow-visible relative border-r border-white/5">
-      <div className="w-full flex justify-center mb-8 px-2 shadow-2xl">
+      <div className="w-full flex justify-center mb-8 px-2">
         <div className="p-2.5 bg-gradient-to-br from-slate-600 to-slate-800 rounded-xl shadow-2xl">
-           <Box className="w-5 h-5 text-white" />
+           <FlaskConical className="w-5 h-5 text-white" />
         </div>
       </div>
 
