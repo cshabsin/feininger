@@ -34,6 +34,7 @@ export default function VersionClient({ version }: { version: Version }) {
   const [currentData, setCurrentData] = useState<FeiningerData | null>(null);
   const { addToHistory } = useHistory();
   const [renderMode, setRenderMode] = useState<RenderMode>(() => version === 'calm-day-at-sea-iii' ? 'svg' : 'canvas');
+  const [isRendering, setIsRendering] = useState(false);
 
   const handleGenerate = (overrideForceWaldo: boolean = false) => {
     const newData = getNewData(version, dimensions, overrideForceWaldo);
@@ -45,6 +46,13 @@ export default function VersionClient({ version }: { version: Version }) {
     handleGenerate();
      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [version]);
+
+  // Provide visual feedback during renderer switch
+  useEffect(() => {
+    setIsRendering(true);
+    const timer = setTimeout(() => setIsRendering(false), 400);
+    return () => clearTimeout(timer);
+  }, [renderMode]);
 
   const showRenderToggle = true;
 
@@ -107,6 +115,14 @@ export default function VersionClient({ version }: { version: Version }) {
             <div className="absolute -inset-2 bg-gradient-to-r from-slate-800 to-neutral-800 rounded-lg blur-2xl opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
             
             <div className="relative border-[1px] border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)] bg-white overflow-hidden rounded-sm ring-1 ring-white/5 w-full">
+              {/* Rendering Overlay */}
+              {isRendering && (
+                <div className="absolute inset-0 z-40 bg-neutral-950/40 backdrop-blur-md flex flex-col items-center justify-center transition-opacity duration-300">
+                  <RefreshCw className="w-8 h-8 text-white animate-spin mb-4 opacity-80" />
+                  <span className="text-[10px] font-mono text-white/60 uppercase tracking-[0.3em]">Rendering</span>
+                </div>
+              )}
+
               {currentData ? (
                 <>
                   {currentData.version === 'calm-day-at-sea-iii' ? (
