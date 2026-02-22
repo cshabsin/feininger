@@ -29,8 +29,8 @@ export const Sidebar = () => {
       }}
     >
       <div className="flex flex-col items-center gap-4">
-        <span className="font-mono text-[10px] opacity-30 tracking-[0.3em] uppercase">{id}</span>
-        <span className="font-black text-xs uppercase tracking-[0.2em] whitespace-nowrap">{label}</span>
+        <span className="font-mono text-[9px] opacity-30 tracking-wider uppercase">{id}</span>
+        <span className="font-black text-[11px] uppercase tracking-normal whitespace-nowrap">{label}</span>
       </div>
       
       {/* Visual indicator for "active" overlap */}
