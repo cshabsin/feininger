@@ -117,6 +117,15 @@ export default function VersionClient({ version }: { version: Version }) {
               </div>
             )}
           </div>
+
+          <div className="mt-12 max-w-2xl text-center">
+            <p className="text-neutral-400 text-sm leading-relaxed font-light tracking-wide">
+              {currentData?.version === 'prismatic-sails' && "An early generative exploration based roughly on 'Calm Day at Sea II', created with loose prompting to Gemini 2.5."}
+              {currentData?.version === 'the-watchers' && "Another early experimental piece inspired by 'Calm Day at Sea II', developed through iterative prompting with Gemini 2.5."}
+              {currentData?.version === 'calm-day-at-sea-iii' && "A master reference resulting from a specific request to Gemini 3.1 Pro to interpret and animate 'Calm Day at Sea III' as a hand-crafted SVG."}
+              {currentData?.version === 'calm-day-n-plus-1' && "A programmatic attempt to generate new scenarios based on the 'Calm Day at Sea III' reference, with code assistance from Gemini 3.1 Pro."}
+            </p>
+          </div>
         </div>
       </div>
     </div>
