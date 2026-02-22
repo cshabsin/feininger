@@ -17,7 +17,7 @@ export const Sidebar = () => {
         transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]
         -mr-px no-underline
         ${isActive(href) 
-          ? 'z-20 translate-x-0 shadow-[-15px_0_40px_rgba(0,0,0,0.6)] font-black' 
+          ? 'z-20 translate-x-0 shadow-[-15px_0_40px_rgba(0,0,0,0.6)] font-bold' 
           : 'z-10 translate-x-6 hover:translate-x-3 opacity-60 hover:opacity-100'
         }
       `}
@@ -25,7 +25,7 @@ export const Sidebar = () => {
         height: '140px',
         width: '56px',
         backgroundColor: isActive(href) ? '#e5e5e5' : '#333333',
-        color: isActive(href) ? '#000000' : '#ffffff', // Explicit white/black text
+        color: isActive(href) ? '#000000' : '#ffffff',
         clipPath: 'polygon(20% 0%, 100% 0%, 100% 100%, 20% 100%, 0% 90%, 0% 10%)',
       }}
     >
@@ -34,7 +34,7 @@ export const Sidebar = () => {
         style={{ transform: 'rotate(90deg)' }}
       >
         <span className={`font-mono text-[9px] tracking-widest uppercase ${isActive(href) ? 'opacity-60' : 'opacity-40'}`}>{id}</span>
-        <span className="font-black text-[11px] uppercase tracking-normal">{label}</span>
+        <span className="font-bold text-[11px] tracking-tight">{label}</span>
       </div>
       
       {/* Visual indicator for "active" overlap */}
@@ -49,7 +49,7 @@ export const Sidebar = () => {
 
   return (
     <aside className="w-16 bg-neutral-950 flex flex-col items-end py-8 gap-2 overflow-visible relative border-r border-white/5">
-      <div className="w-full flex justify-center mb-8 px-2">
+      <div className="w-full flex justify-center mb-8 px-2 shadow-2xl">
         <div className="p-2.5 bg-gradient-to-br from-slate-600 to-slate-800 rounded-xl shadow-2xl">
            <Box className="w-5 h-5 text-white" />
         </div>

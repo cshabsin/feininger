@@ -9,7 +9,7 @@ import { FeiningerGemini3Canvas } from "../components/FeiningerGemini3Canvas";
 import { FeiningerV3 } from "../components/FeiningerV3";
 import { FeiningerV3Canvas } from "../components/FeiningerV3Canvas";
 import { useHistory } from "../context/HistoryContext";
-import { RefreshCw, Box, FileCode, Play } from "lucide-react";
+import { RefreshCw, Box } from "lucide-react";
 
 type Version = 'prismatic-sails' | 'the-watchers' | 'calm-day-n-plus-1' | 'calm-day-at-sea-iii';
 type RenderMode = 'svg' | 'canvas';
@@ -52,14 +52,14 @@ export default function VersionClient({ version }: { version: Version }) {
     <div className="flex-1 h-screen flex flex-col relative overflow-y-auto bg-[radial-gradient(circle_at_50%_0%,rgba(30,41,59,0.15),transparent)]">
       <header className="flex items-center justify-between px-10 py-10 bg-transparent sticky top-0 z-20">
         <div>
-          <h1 className="text-3xl font-black tracking-tighter text-white uppercase italic drop-shadow-2xl">
+          <h1 className="text-3xl font-bold tracking-tight text-white drop-shadow-2xl">
             {currentData?.version === 'prismatic-sails' ? 'Prismatic Sails' : currentData?.version === 'the-watchers' ? 'The Watchers' : currentData?.version === 'calm-day-n-plus-1' ? 'Calm Day at Sea N+1' : 'Calm Day at Sea III'}
           </h1>
           <div className="flex items-center gap-3 mt-2">
-             <span className="px-2 py-0.5 bg-white/5 backdrop-blur-md border border-white/10 text-[10px] font-mono text-slate-400 rounded uppercase tracking-tighter shadow-xl">
+             <span className="px-2 py-0.5 bg-white/5 backdrop-blur-md border border-white/10 text-[10px] font-mono text-slate-400 rounded shadow-xl uppercase">
                 Edition {currentData?.seed || '000'}
              </span>
-             <span className="text-[10px] text-neutral-500 font-mono uppercase tracking-widest opacity-40">
+             <span className="text-[10px] text-neutral-500 font-mono opacity-40 uppercase">
                 {currentData?.version || 'N/A'}
              </span>
           </div>
@@ -73,28 +73,28 @@ export default function VersionClient({ version }: { version: Version }) {
                />
                <button 
                  onClick={() => setRenderMode('svg')}
-                 className={`flex-1 flex flex-col items-center justify-center z-10 transition-all duration-500 ${renderMode === 'svg' ? 'text-black scale-100' : 'text-neutral-500 hover:text-neutral-300'}`}
+                 className={`flex-1 flex flex-col items-center justify-center z-10 transition-all duration-500 ${renderMode === 'svg' ? 'text-black font-bold' : 'text-neutral-500 hover:text-neutral-300'}`}
                >
-                 <span className="text-[10px] font-black tracking-[0.25em] uppercase">SVG</span>
-                 <span className="text-[8px] font-mono opacity-60 uppercase mt-0.5 tracking-tighter">Vector</span>
+                 <span className="text-[11px] font-bold tracking-wide">SVG</span>
+                 <span className="text-[8px] font-mono opacity-60 mt-0.5 tracking-tight uppercase">Vector</span>
                </button>
                <button 
                  onClick={() => setRenderMode('canvas')}
-                 className={`flex-1 flex flex-col items-center justify-center z-10 transition-all duration-500 ${renderMode === 'canvas' ? 'text-black scale-100' : 'text-neutral-500 hover:text-neutral-300'}`}
+                 className={`flex-1 flex flex-col items-center justify-center z-10 transition-all duration-500 ${renderMode === 'canvas' ? 'text-black font-bold' : 'text-neutral-500 hover:text-neutral-300'}`}
                >
-                 <span className="text-[10px] font-black tracking-[0.25em] uppercase">Canvas</span>
-                 <span className="text-[8px] font-mono opacity-60 uppercase mt-0.5 tracking-tighter">Raster</span>
+                 <span className="text-[11px] font-bold tracking-wide">Canvas</span>
+                 <span className="text-[8px] font-mono opacity-60 mt-0.5 tracking-tight uppercase">Raster</span>
                </button>
             </div>
           )}
 
           <button 
              onClick={(e) => handleGenerate(e.shiftKey)} 
-             className="flex items-center gap-4 px-12 py-4.5 bg-white text-black hover:bg-neutral-100 rounded-2xl font-black transition-all shadow-[0_0_50px_rgba(255,255,255,0.1)] active:scale-[0.98] uppercase tracking-widest text-xs group relative overflow-hidden"
+             className="flex items-center gap-4 px-12 py-4.5 bg-white text-black hover:bg-neutral-100 rounded-2xl font-bold transition-all shadow-[0_0_50px_rgba(255,255,255,0.1)] active:scale-[0.98] group relative overflow-hidden"
           >
              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
              <RefreshCw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-700 relative z-10" />
-             <span className="relative z-10">Re-Imagine</span>
+             <span className="relative z-10 text-xs tracking-wider uppercase">Re-Imagine</span>
           </button>
         </div>
       </header>
@@ -127,18 +127,18 @@ export default function VersionClient({ version }: { version: Version }) {
 
       <footer className="p-12 flex justify-center gap-16 text-neutral-500 bg-transparent">
          <div className="flex flex-col items-center">
-           <span className="text-[10px] uppercase tracking-[0.3em] mb-2 opacity-30 font-bold text-white">Architecture</span>
-           <span className="text-xs font-black text-neutral-400 uppercase tracking-tighter">{currentData?.version === 'calm-day-at-sea-iii' ? 'Calm Day at Sea III' : currentData?.version === 'calm-day-n-plus-1' ? 'Calm Day at Sea N+1' : currentData?.version === 'prismatic-sails' ? 'Prismatic Sails' : currentData?.version === 'the-watchers' ? 'The Watchers' : (currentData?.version || '-')}</span>
+           <span className="text-[10px] tracking-widest mb-2 opacity-30 font-bold text-white uppercase">Architecture</span>
+           <span className="text-xs font-bold text-neutral-400 tracking-tight">{currentData?.version === 'calm-day-at-sea-iii' ? 'Calm Day at Sea III' : currentData?.version === 'calm-day-n-plus-1' ? 'Calm Day at Sea N+1' : currentData?.version === 'prismatic-sails' ? 'Prismatic Sails' : currentData?.version === 'the-watchers' ? 'The Watchers' : (currentData?.version || '-')}</span>
          </div>
          <div className="flex flex-col items-center">
-           <span className="text-[10px] uppercase tracking-[0.3em] mb-2 opacity-30 font-bold text-white">Renderer</span>
-           <span className="text-xs font-black text-neutral-400 uppercase tracking-tighter">
-             {renderMode.toUpperCase()}
+           <span className="text-[10px] tracking-widest mb-2 opacity-30 font-bold text-white uppercase">Renderer</span>
+           <span className="text-xs font-bold text-neutral-400 tracking-tight">
+             {renderMode === 'svg' ? 'SVG' : 'Canvas'}
            </span>
          </div>
          <div className="flex flex-col items-center">
-           <span className="text-[10px] uppercase tracking-[0.3em] mb-2 opacity-30 font-bold text-white">Resolution</span>
-           <span className="text-xs font-black text-neutral-400 uppercase tracking-tighter">800 &times; 1200</span>
+           <span className="text-[10px] tracking-widest mb-2 opacity-30 font-bold text-white uppercase">Resolution</span>
+           <span className="text-xs font-bold text-neutral-400 tracking-tight">800 &times; 1200</span>
          </div>
       </footer>
     </div>
