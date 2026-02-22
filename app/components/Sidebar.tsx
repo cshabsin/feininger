@@ -23,10 +23,10 @@ export const Sidebar = () => {
       `}
       style={{ 
         height: '140px',
-        width: '56px',
+        width: '36px',
         backgroundColor: isActive(href) ? '#e5e5e5' : '#333333',
         color: isActive(href) ? '#000000' : '#ffffff',
-        clipPath: 'polygon(20% 0%, 100% 0%, 100% 100%, 20% 100%, 0% 90%, 0% 10%)',
+        clipPath: 'polygon(80% 0%, 100% 0%, 100% 100%, 80% 100%, 0% 90%, 0% 10%)',
       }}
     >
       <div 

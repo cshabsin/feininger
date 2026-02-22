@@ -55,14 +55,6 @@ export default function VersionClient({ version }: { version: Version }) {
           <h1 className="text-3xl font-bold tracking-tight text-white drop-shadow-2xl">
             {currentData?.version === 'prismatic-sails' ? 'Prismatic Sails' : currentData?.version === 'the-watchers' ? 'The Watchers' : currentData?.version === 'calm-day-n-plus-1' ? 'Calm Day at Sea N+1' : 'Calm Day at Sea III'}
           </h1>
-          <div className="flex items-center gap-3 mt-2">
-             <span className="px-2 py-0.5 bg-white/5 backdrop-blur-md border border-white/10 text-[10px] font-mono text-slate-400 rounded shadow-xl uppercase">
-                Edition {currentData?.seed || '000'}
-             </span>
-             <span className="text-[10px] text-neutral-500 font-mono opacity-40 uppercase">
-                {currentData?.version || 'N/A'}
-             </span>
-          </div>
         </div>
 
         <div className="flex items-center gap-10">
