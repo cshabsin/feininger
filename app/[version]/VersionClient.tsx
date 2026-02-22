@@ -55,9 +55,14 @@ export default function VersionClient({ version }: { version: Version }) {
           <h1 className="text-3xl font-bold tracking-tight text-white drop-shadow-2xl">
             {currentData?.version === 'prismatic-sails' ? 'Prismatic Sails' : currentData?.version === 'the-watchers' ? 'The Watchers' : currentData?.version === 'calm-day-n-plus-1' ? 'Calm Day at Sea N+1' : 'Calm Day at Sea III'}
           </h1>
+          <div className="flex items-center gap-3 mt-2">
+             <span className="text-[10px] text-neutral-500 font-mono opacity-40 uppercase">
+                {currentData?.version || 'N/A'}
+             </span>
+          </div>
         </div>
 
-        <div className="flex items-center gap-10">
+        <div className="flex items-center gap-12">
           {showRenderToggle && (
             <div className="flex flex-col items-center gap-2">
               <span className="text-[9px] font-mono uppercase opacity-20 tracking-[0.3em]">Renderer</span>
@@ -83,39 +88,43 @@ export default function VersionClient({ version }: { version: Version }) {
             </div>
           )}
 
-          <button 
-             onClick={(e) => handleGenerate(e.shiftKey)} 
-             className="flex items-center gap-4 px-12 py-4.5 bg-white text-black hover:bg-neutral-100 rounded-2xl font-bold transition-all shadow-[0_0_50px_rgba(255,255,255,0.1)] active:scale-[0.98] group relative overflow-hidden"
-          >
-             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-             <RefreshCw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-700 relative z-10" />
-             <span className="relative z-10 text-xs tracking-wider uppercase">Re-Imagine</span>
-          </button>
+          <div className="flex flex-col items-center gap-2">
+            <span className="text-[9px] font-mono uppercase opacity-20 tracking-[0.3em]">Actions</span>
+            <button 
+               onClick={(e) => handleGenerate(e.shiftKey)} 
+               className="flex items-center gap-3 h-11 px-8 bg-white/10 backdrop-blur-3xl border border-white/10 rounded-xl font-bold transition-all hover:bg-white/20 active:scale-[0.98] group shadow-2xl ring-1 ring-white/5"
+            >
+               <RefreshCw className="w-3.5 h-3.5 group-hover:rotate-180 transition-transform duration-700 text-neutral-400" />
+               <span className="text-[10px] tracking-widest uppercase text-white">Re-Imagine</span>
+            </button>
+          </div>
         </div>
       </header>
 
       <div className="flex-1 flex items-center justify-center p-12">
-        <div className="relative group">
-          <div className="absolute -inset-2 bg-gradient-to-r from-slate-800 to-neutral-800 rounded-lg blur-2xl opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-          
-          <div className="relative border-[1px] border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)] bg-white overflow-hidden rounded-sm ring-1 ring-white/5">
-            {currentData ? (
-              <>
-                {currentData.version === 'calm-day-at-sea-iii' ? (
-                  renderMode === 'svg' ? <FeiningerGemini3 /> : <FeiningerGemini3Canvas />
-                ) : currentData.version === 'calm-day-n-plus-1' ? (
-                  renderMode === 'svg' ? <FeiningerV3 data={currentData} /> : <FeiningerV3Canvas data={currentData} />
-                ) : renderMode === 'svg' ? (
-                   <FeiningerSVG data={currentData} />
-                ) : (
-                   <FeiningerCanvas data={currentData} />
-                )}
-              </>
-            ) : (
-              <div className="flex items-center justify-center h-[600px] w-[800px] bg-neutral-900 text-neutral-700 animate-pulse">
-                <Box className="w-12 h-12" />
-              </div>
-            )}
+        <div className="flex flex-col items-center w-full">
+          <div className="relative group max-w-[800px] w-full">
+            <div className="absolute -inset-2 bg-gradient-to-r from-slate-800 to-neutral-800 rounded-lg blur-2xl opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+            
+            <div className="relative border-[1px] border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)] bg-white overflow-hidden rounded-sm ring-1 ring-white/5 w-full">
+              {currentData ? (
+                <>
+                  {currentData.version === 'calm-day-at-sea-iii' ? (
+                    renderMode === 'svg' ? <FeiningerGemini3 /> : <FeiningerGemini3Canvas />
+                  ) : currentData.version === 'calm-day-n-plus-1' ? (
+                    renderMode === 'svg' ? <FeiningerV3 data={currentData} /> : <FeiningerV3Canvas data={currentData} />
+                  ) : renderMode === 'svg' ? (
+                     <FeiningerSVG data={currentData} />
+                  ) : (
+                     <FeiningerCanvas data={currentData} />
+                  )}
+                </>
+              ) : (
+                <div className="flex items-center justify-center h-[600px] w-[800px] bg-neutral-900 text-neutral-700 animate-pulse">
+                  <Box className="w-12 h-12" />
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="mt-12 max-w-2xl text-center">
