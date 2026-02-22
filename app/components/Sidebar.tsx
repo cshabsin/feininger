@@ -30,10 +30,9 @@ export const Sidebar = () => {
       }}
     >
       <div 
-        className="flex items-center gap-4 whitespace-nowrap"
+        className="flex items-center justify-center whitespace-nowrap"
         style={{ transform: 'rotate(90deg)' }}
       >
-        <span className={`font-mono text-[9px] tracking-widest uppercase ${isActive(href) ? 'opacity-60' : 'opacity-40'}`}>{id}</span>
         <span className="font-bold text-[11px] tracking-tight">{label}</span>
       </div>
       
