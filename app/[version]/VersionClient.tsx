@@ -113,48 +113,46 @@ export default function VersionClient({ version }: { version: Version }) {
         </div>
       </header>
 
-      <div className="flex-1 flex items-center justify-center p-12">
-        <div className="flex flex-col items-center w-full">
-          <div className={`relative group w-full ${currentData?.width === 800 && currentData?.height === 1200 ? 'max-w-[400px]' : 'max-w-[800px]'}`}>
-            <div className="absolute -inset-2 bg-gradient-to-r from-slate-800 to-neutral-800 rounded-lg blur-2xl opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-            
-            <div className="relative border-[1px] border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)] bg-neutral-900 overflow-hidden rounded-sm ring-1 ring-white/5 w-full">
-              {/* Rendering Overlay */}
-              {isRendering && (
-                <div className="absolute inset-0 z-40 bg-neutral-950/40 backdrop-blur-md flex flex-col items-center justify-center transition-opacity duration-300">
-                  <RefreshCw className="w-8 h-8 text-white animate-spin mb-4 opacity-80" />
-                  <span className="text-[10px] font-mono text-white/60 uppercase tracking-[0.3em]">Rendering</span>
-                </div>
-              )}
+      <div className="flex-1 flex flex-col items-center justify-center p-12 overflow-y-auto">
+        <div className={`relative group w-full ${currentData?.width === 800 && currentData?.height === 1200 ? 'max-w-[400px]' : 'max-w-[800px]'} transition-all duration-500`}>
+          <div className="absolute -inset-2 bg-gradient-to-r from-slate-800 to-neutral-800 rounded-lg blur-2xl opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+          
+          <div className="relative border-[1px] border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)] bg-neutral-900 overflow-hidden rounded-sm ring-1 ring-white/5 w-full">
+            {/* Rendering Overlay */}
+            {isRendering && (
+              <div className="absolute inset-0 z-40 bg-neutral-950/40 backdrop-blur-md flex flex-col items-center justify-center transition-opacity duration-300">
+                <RefreshCw className="w-8 h-8 text-white animate-spin mb-4 opacity-80" />
+                <span className="text-[10px] font-mono text-white/60 uppercase tracking-[0.3em]">Rendering</span>
+              </div>
+            )}
 
-              {currentData ? (
-                <>
-                  {currentData.version === 'calm-day-at-sea-iii' ? (
-                    renderMode === 'svg' ? <FeiningerGemini3 /> : <FeiningerGemini3Canvas />
-                  ) : currentData.version === 'calm-day-n-plus-1' ? (
-                    renderMode === 'svg' ? <FeiningerV3 data={currentData} /> : <FeiningerV3Canvas data={currentData} />
-                  ) : renderMode === 'svg' ? (
-                     <FeiningerSVG data={currentData} />
-                  ) : (
-                     <FeiningerCanvas data={currentData} />
-                  )}
-                </>
-              ) : (
-                <div className="flex items-center justify-center h-[600px] w-[800px] bg-neutral-900 text-neutral-700 animate-pulse">
-                  <Box className="w-12 h-12" />
-                </div>
-              )}
-            </div>
+            {currentData ? (
+              <>
+                {currentData.version === 'calm-day-at-sea-iii' ? (
+                  renderMode === 'svg' ? <FeiningerGemini3 /> : <FeiningerGemini3Canvas />
+                ) : currentData.version === 'calm-day-n-plus-1' ? (
+                  renderMode === 'svg' ? <FeiningerV3 data={currentData} /> : <FeiningerV3Canvas data={currentData} />
+                ) : renderMode === 'svg' ? (
+                   <FeiningerSVG data={currentData} />
+                ) : (
+                   <FeiningerCanvas data={currentData} />
+                )}
+              </>
+            ) : (
+              <div className="flex items-center justify-center h-[600px] w-[800px] bg-neutral-900 text-neutral-700 animate-pulse">
+                <Box className="w-12 h-12" />
+              </div>
+            )}
           </div>
+        </div>
 
-          <div className="mt-12 max-w-2xl text-center">
-            <p className="text-neutral-400 text-sm leading-relaxed font-light tracking-wide">
-              {currentData?.version === 'prismatic-sails' && "An early generative exploration based roughly on 'Calm Day at Sea II', created with loose prompting to Gemini 2.5."}
-              {currentData?.version === 'the-watchers' && "Another early experimental piece inspired by 'Calm Day at Sea II', developed through iterative prompting with Gemini 2.5."}
-              {currentData?.version === 'calm-day-at-sea-iii' && "A master reference resulting from a specific request to Gemini 3.1 Pro to interpret and animate 'Calm Day at Sea III' as a hand-crafted SVG."}
-              {currentData?.version === 'calm-day-n-plus-1' && "A programmatic attempt to generate new scenarios based on the 'Calm Day at Sea III' reference, with code assistance from Gemini 3.1 Pro."}
-            </p>
-          </div>
+        <div className="mt-12 max-w-2xl text-center">
+          <p className="text-neutral-400 text-sm leading-relaxed font-light tracking-wide">
+            {currentData?.version === 'prismatic-sails' && "An early generative exploration based roughly on 'Calm Day at Sea II', created with loose prompting to Gemini 2.5."}
+            {currentData?.version === 'the-watchers' && "Another early experimental piece inspired by 'Calm Day at Sea II', developed through iterative prompting with Gemini 2.5."}
+            {currentData?.version === 'calm-day-at-sea-iii' && "A master reference resulting from a specific request to Gemini 3.1 Pro to interpret and animate 'Calm Day at Sea III' as a hand-crafted SVG."}
+            {currentData?.version === 'calm-day-n-plus-1' && "A programmatic attempt to generate new scenarios based on the 'Calm Day at Sea III' reference, with code assistance from Gemini 3.1 Pro."}
+          </p>
         </div>
       </div>
     </div>
